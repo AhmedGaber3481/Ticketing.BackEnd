@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LinkDev.Ticketing.Application\LinkDev.Ticketing.Application.csproj" />
+    <ProjectReference Include="..\LinkDev.Ticketing.Core\LinkDev.Ticketing.Core.csproj" />
+    <ProjectReference Include="..\LinkDev.Ticketing.Domain\LinkDev.Ticketing.Domain.csproj" />
+    <ProjectReference Include="..\LinkDev.Ticketing.Infrastructure\LinkDev.Ticketing.Infrastructure.csproj" />
+    <ProjectReference Include="..\LinkDev.Ticketing.Logging.Application\LinkDev.Ticketing.Logging.Application.csproj" />
+    <ProjectReference Include="..\LinkDev.Ticketing.Logging.Infra\LinkDev.Ticketing.Logging.Infra.csproj" />
+    <ProjectReference Include="..\LinkDev.Ticketing.Resources\LinkDev.Ticketing.Resources.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,94 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.3.11505.172 d18.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkDev.Ticketing.Core", "LinkDev.Ticketing.Core\LinkDev.Ticketing.Core.csproj", "{07D48AD2-28E3-4296-83A2-ED0093765A42}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CMS", "CMS", "{F9FEEEBD-1118-4BF8-AF81-23A724EDB51D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkDev.Ticketing.Resources", "LinkDev.Ticketing.Resources\LinkDev.Ticketing.Resources.csproj", "{09FD2ABD-117B-4010-A263-DBB2E3B8E10C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkDev.Ticketing.CMS.API", "LinkDev.Ticketing.CMS.API\LinkDev.Ticketing.CMS.API.csproj", "{AB8A10CA-EF54-4EA8-ACDE-282DF6CFC288}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkDev.Ticketing.WebAPI", "LinkDev.Ticketing.WebAPI\LinkDev.Ticketing.WebAPI.csproj", "{6D6F94BB-8974-4DC1-AC5C-B7779682129C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkDev.Ticketing.Application", "LinkDev.Ticketing.Application\LinkDev.Ticketing.Application.csproj", "{9705DDFB-A06D-4EE3-B7C5-4598ABDD262B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkDev.Ticketing.Infrastructure", "LinkDev.Ticketing.Infrastructure\LinkDev.Ticketing.Infrastructure.csproj", "{7206ECF3-B567-4B86-BE5B-BE357779834A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkDev.Ticketing.Domain", "LinkDev.Ticketing.Domain\LinkDev.Ticketing.Domain.csproj", "{0B636F82-D90C-46E3-9FFF-E1D673EB5184}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{99094557-30BC-4669-A28F-149A90E9EA09}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logging", "Logging", "{4D8C7046-CFA9-404E-8A22-5F857407E52F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkDev.Ticketing.Logging.Domain", "LinkDev.Ticketing.Logging.Domain\LinkDev.Ticketing.Logging.Domain.csproj", "{02B0B51E-74AE-48CB-A256-ED782D9E6145}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkDev.Ticketing.Logging.Infra", "LinkDev.Ticketing.Logging.Infra\LinkDev.Ticketing.Logging.Infra.csproj", "{EFA7D7D9-B6F9-4B2E-9E4B-85157D49405E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkDev.Ticketing.Logging.Application", "LinkDev.Ticketing.Logging.Application\LinkDev.Ticketing.Logging.Application.csproj", "{DF095CA3-4791-45C4-9B0D-AF7FFBC2018A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{07D48AD2-28E3-4296-83A2-ED0093765A42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07D48AD2-28E3-4296-83A2-ED0093765A42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07D48AD2-28E3-4296-83A2-ED0093765A42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07D48AD2-28E3-4296-83A2-ED0093765A42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09FD2ABD-117B-4010-A263-DBB2E3B8E10C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09FD2ABD-117B-4010-A263-DBB2E3B8E10C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09FD2ABD-117B-4010-A263-DBB2E3B8E10C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09FD2ABD-117B-4010-A263-DBB2E3B8E10C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB8A10CA-EF54-4EA8-ACDE-282DF6CFC288}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB8A10CA-EF54-4EA8-ACDE-282DF6CFC288}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB8A10CA-EF54-4EA8-ACDE-282DF6CFC288}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB8A10CA-EF54-4EA8-ACDE-282DF6CFC288}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D6F94BB-8974-4DC1-AC5C-B7779682129C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D6F94BB-8974-4DC1-AC5C-B7779682129C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D6F94BB-8974-4DC1-AC5C-B7779682129C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D6F94BB-8974-4DC1-AC5C-B7779682129C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9705DDFB-A06D-4EE3-B7C5-4598ABDD262B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9705DDFB-A06D-4EE3-B7C5-4598ABDD262B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9705DDFB-A06D-4EE3-B7C5-4598ABDD262B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9705DDFB-A06D-4EE3-B7C5-4598ABDD262B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7206ECF3-B567-4B86-BE5B-BE357779834A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7206ECF3-B567-4B86-BE5B-BE357779834A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7206ECF3-B567-4B86-BE5B-BE357779834A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7206ECF3-B567-4B86-BE5B-BE357779834A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B636F82-D90C-46E3-9FFF-E1D673EB5184}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B636F82-D90C-46E3-9FFF-E1D673EB5184}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B636F82-D90C-46E3-9FFF-E1D673EB5184}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B636F82-D90C-46E3-9FFF-E1D673EB5184}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02B0B51E-74AE-48CB-A256-ED782D9E6145}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02B0B51E-74AE-48CB-A256-ED782D9E6145}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02B0B51E-74AE-48CB-A256-ED782D9E6145}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02B0B51E-74AE-48CB-A256-ED782D9E6145}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFA7D7D9-B6F9-4B2E-9E4B-85157D49405E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFA7D7D9-B6F9-4B2E-9E4B-85157D49405E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFA7D7D9-B6F9-4B2E-9E4B-85157D49405E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFA7D7D9-B6F9-4B2E-9E4B-85157D49405E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF095CA3-4791-45C4-9B0D-AF7FFBC2018A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF095CA3-4791-45C4-9B0D-AF7FFBC2018A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF095CA3-4791-45C4-9B0D-AF7FFBC2018A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF095CA3-4791-45C4-9B0D-AF7FFBC2018A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{07D48AD2-28E3-4296-83A2-ED0093765A42} = {99094557-30BC-4669-A28F-149A90E9EA09}
+		{09FD2ABD-117B-4010-A263-DBB2E3B8E10C} = {99094557-30BC-4669-A28F-149A90E9EA09}
+		{AB8A10CA-EF54-4EA8-ACDE-282DF6CFC288} = {F9FEEEBD-1118-4BF8-AF81-23A724EDB51D}
+		{4D8C7046-CFA9-404E-8A22-5F857407E52F} = {99094557-30BC-4669-A28F-149A90E9EA09}
+		{02B0B51E-74AE-48CB-A256-ED782D9E6145} = {4D8C7046-CFA9-404E-8A22-5F857407E52F}
+		{EFA7D7D9-B6F9-4B2E-9E4B-85157D49405E} = {4D8C7046-CFA9-404E-8A22-5F857407E52F}
+		{DF095CA3-4791-45C4-9B0D-AF7FFBC2018A} = {4D8C7046-CFA9-404E-8A22-5F857407E52F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AE7453E0-FC8A-4F8B-BA4D-8E7D4FEF99DA}
+	EndGlobalSection
+EndGlobal

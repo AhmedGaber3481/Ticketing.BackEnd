@@ -1,0 +1,6 @@
+@LinkDev.Ticketing.WebAPI_HostAddress = http://localhost:5237
+
+GET {{LinkDev.Ticketing.WebAPI_HostAddress}}/About/
+Accept: application/json
+
+###
