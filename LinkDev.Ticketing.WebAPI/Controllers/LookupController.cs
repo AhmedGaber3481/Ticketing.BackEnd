@@ -2,6 +2,7 @@
 using LinkDev.Ticketing.Application.Dtos;
 using LinkDev.Ticketing.Application.IServices;
 using LinkDev.Ticketing.Application.Services;
+using LinkDev.Ticketing.Core.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LinkDev.Ticketing.WebAPI.Controllers
@@ -11,13 +12,16 @@ namespace LinkDev.Ticketing.WebAPI.Controllers
     public class LookupController : ControllerBase
     {
         private readonly Logging.Application.Interfaces.ILogger _logger;
-        private readonly IServiceProvider _serviceProvider;
+        private readonly string _currentCulture;
+        private readonly LookupFactory _lookupFactory;
 
         public LookupController(Logging.Application.Interfaces.ILogger logger
-            , IServiceProvider serviceProvider)
+            , CultureHelper cultureHelper
+            , LookupFactory lookupFactory)
         {
             _logger = logger;
-            _serviceProvider = serviceProvider;
+            _currentCulture = cultureHelper.Culture ?? "en-US";
+            _lookupFactory = lookupFactory;
         }
         
         [HttpGet("GetLookup")]
@@ -26,14 +30,14 @@ namespace LinkDev.Ticketing.WebAPI.Controllers
             Guid correlationId = Guid.NewGuid();
             try
             {
-                var lookupService = new LookupFactory(_serviceProvider).GetInstance(lookupType);
+                var lookupService = _lookupFactory.GetInstance(lookupType, _currentCulture);
+                var lookupItems = lookupService.GetLookup(lookupType, _currentCulture);
 
-                var types = lookupService.GetLookup(lookupType);
-                return ResponseMessageHelper.Ok(types);
+                return ResponseMessageHelper.Ok(lookupItems);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while retrieving ticket types.", "LookupController", "GetLookup", correlationId);
+                _logger.LogError(ex, "An error occurred while retrieving ticket lookups.", "LookupController", "GetLookup", correlationId, id1: lookupType);
 
                 return ResponseMessageHelper.ServerError(correlationId);
             }

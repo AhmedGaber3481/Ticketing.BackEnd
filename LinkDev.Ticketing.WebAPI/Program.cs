@@ -34,8 +34,12 @@ internal class Program
         builder.Services.AddScoped<ITicketService, TicketService>();
         builder.Services.AddSingleton<DirectoryManager>();
         builder.Services.AddSingleton<FileManager>();
-        //builder.Services.AddScoped<ILookupService, LookupService>();
         builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.AddScoped<CultureHelper>();
+        builder.Services.AddScoped<LookupFactory>();
+        builder.Services.AddScoped(typeof(TicketLookupService<>));
+        
 
         builder.Services.AddMemoryCache();
 

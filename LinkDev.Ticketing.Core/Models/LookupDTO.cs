@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LinkDev.Ticketing.Application.Dtos
+namespace LinkDev.Ticketing.Core.Models
 {
     public class LookupDTO
     {

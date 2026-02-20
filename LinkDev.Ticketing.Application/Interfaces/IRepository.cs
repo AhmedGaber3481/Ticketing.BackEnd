@@ -16,7 +16,7 @@ namespace LinkDev.Ticketing.Application.Interfaces
 
         IQueryable<T> GetAll(string navigationProperty);
 
-        IQueryable<T> GetAll(params Expression<Func<T, object>>[] dependencies);
+        IQueryable<T> GetAll(params Expression<Func<T, object>>[] expressions);
 
         T? GetById(int Id);
 
