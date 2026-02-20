@@ -29,6 +29,7 @@ internal class Program
         builder.Services.AddDbContext<TicketingContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("TicketingConnection")));
 
+        builder.Services.AddMemoryCache();
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
         builder.Services.AddScoped(typeof(LinkDev.Ticketing.Application.Interfaces.IRepository<>), typeof(LinkDev.Ticketing.Infrastructure.Repositories.Repository<>));
         builder.Services.AddScoped<ITicketService, TicketService>();
@@ -37,11 +38,8 @@ internal class Program
         builder.Services.AddScoped<ITicketRepository, TicketRepository>();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddScoped<CultureHelper>();
-        builder.Services.AddScoped<LookupFactory>();
-        builder.Services.AddScoped(typeof(TicketLookupService<>));
-        
-
-        builder.Services.AddMemoryCache();
+        builder.Services.AddScoped<ILookupRepository, LookupRepository>();
+        builder.Services.AddScoped<ILookupService, LookupService>();
 
         var CrossOrigin = builder.Configuration["CorsOrigin"];
 

@@ -13,15 +13,15 @@ namespace LinkDev.Ticketing.WebAPI.Controllers
     {
         private readonly Logging.Application.Interfaces.ILogger _logger;
         private readonly string _currentCulture;
-        private readonly LookupFactory _lookupFactory;
+        private readonly ILookupService _lookupService;
 
         public LookupController(Logging.Application.Interfaces.ILogger logger
             , CultureHelper cultureHelper
-            , LookupFactory lookupFactory)
+            , ILookupService lookupService)
         {
             _logger = logger;
             _currentCulture = cultureHelper.Culture ?? "en-US";
-            _lookupFactory = lookupFactory;
+            _lookupService = lookupService;
         }
         
         [HttpGet("GetLookup")]
@@ -30,8 +30,7 @@ namespace LinkDev.Ticketing.WebAPI.Controllers
             Guid correlationId = Guid.NewGuid();
             try
             {
-                var lookupService = _lookupFactory.GetInstance(lookupType, _currentCulture);
-                var lookupItems = lookupService.GetLookup(lookupType, _currentCulture);
+                var lookupItems = _lookupService.GetLookup(lookupType, _currentCulture);
 
                 return ResponseMessageHelper.Ok(lookupItems);
             }
