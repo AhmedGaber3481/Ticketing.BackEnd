@@ -18,8 +18,8 @@ namespace LinkDev.Ticketing.Application.IServices
         {
             return _memoryCache.GetOrCreate(lookupKey, entry =>
             {
-                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
-                entry.SlidingExpiration = TimeSpan.FromMinutes(2);
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(20);
+                entry.SlidingExpiration = TimeSpan.FromMinutes(20);
                 entry.Priority = CacheItemPriority.High;
 
                 return GetAll();
