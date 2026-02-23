@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.3.11505.172 d18.3
+VisualStudioVersion = 18.3.11505.172
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkDev.Ticketing.Core", "LinkDev.Ticketing.Core\LinkDev.Ticketing.Core.csproj", "{07D48AD2-28E3-4296-83A2-ED0093765A42}"
 EndProject
@@ -28,6 +28,16 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkDev.Ticketing.Logging.Infra", "LinkDev.Ticketing.Logging.Infra\LinkDev.Ticketing.Logging.Infra.csproj", "{EFA7D7D9-B6F9-4B2E-9E4B-85157D49405E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkDev.Ticketing.Logging.Application", "LinkDev.Ticketing.Logging.Application\LinkDev.Ticketing.Logging.Application.csproj", "{DF095CA3-4791-45C4-9B0D-AF7FFBC2018A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "User.Management", "User.Management", "{9BA66F14-B5D8-4727-B891-550B1E60E84B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkDev.UserManagent.Application", "LinkDev.UserManagent.Application\LinkDev.UserManagent.Application.csproj", "{F492D959-3B2C-4940-A2A1-10EFA545983E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkDev.UserManagent.Domain", "LinkDev.UserManagent.Domain\LinkDev.UserManagent.Domain.csproj", "{81784330-D249-41A0-8E15-9197B51B7B11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkDev.UserManagent.Infrastructure", "LinkDev.UserManagent.Infrastructure\LinkDev.UserManagent.Infrastructure.csproj", "{8BFAEE36-C195-4496-9B19-028C5FB68963}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkDev.UserManagent.WebAPI", "LinkDev.UserManagent.WebAPI\LinkDev.UserManagent.WebAPI.csproj", "{DD8C9816-49FE-4CCA-8D51-1624C058E1C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +85,22 @@ Global
 		{DF095CA3-4791-45C4-9B0D-AF7FFBC2018A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF095CA3-4791-45C4-9B0D-AF7FFBC2018A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF095CA3-4791-45C4-9B0D-AF7FFBC2018A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F492D959-3B2C-4940-A2A1-10EFA545983E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F492D959-3B2C-4940-A2A1-10EFA545983E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F492D959-3B2C-4940-A2A1-10EFA545983E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F492D959-3B2C-4940-A2A1-10EFA545983E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81784330-D249-41A0-8E15-9197B51B7B11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81784330-D249-41A0-8E15-9197B51B7B11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81784330-D249-41A0-8E15-9197B51B7B11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81784330-D249-41A0-8E15-9197B51B7B11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BFAEE36-C195-4496-9B19-028C5FB68963}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BFAEE36-C195-4496-9B19-028C5FB68963}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BFAEE36-C195-4496-9B19-028C5FB68963}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BFAEE36-C195-4496-9B19-028C5FB68963}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD8C9816-49FE-4CCA-8D51-1624C058E1C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD8C9816-49FE-4CCA-8D51-1624C058E1C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD8C9816-49FE-4CCA-8D51-1624C058E1C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD8C9816-49FE-4CCA-8D51-1624C058E1C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -87,6 +113,10 @@ Global
 		{02B0B51E-74AE-48CB-A256-ED782D9E6145} = {4D8C7046-CFA9-404E-8A22-5F857407E52F}
 		{EFA7D7D9-B6F9-4B2E-9E4B-85157D49405E} = {4D8C7046-CFA9-404E-8A22-5F857407E52F}
 		{DF095CA3-4791-45C4-9B0D-AF7FFBC2018A} = {4D8C7046-CFA9-404E-8A22-5F857407E52F}
+		{F492D959-3B2C-4940-A2A1-10EFA545983E} = {9BA66F14-B5D8-4727-B891-550B1E60E84B}
+		{81784330-D249-41A0-8E15-9197B51B7B11} = {9BA66F14-B5D8-4727-B891-550B1E60E84B}
+		{8BFAEE36-C195-4496-9B19-028C5FB68963} = {9BA66F14-B5D8-4727-B891-550B1E60E84B}
+		{DD8C9816-49FE-4CCA-8D51-1624C058E1C2} = {9BA66F14-B5D8-4727-B891-550B1E60E84B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AE7453E0-FC8A-4F8B-BA4D-8E7D4FEF99DA}

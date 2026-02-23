@@ -1,0 +1,6 @@
+@LinkDev.UserManagent.WebAPI_HostAddress = http://localhost:5122
+
+GET {{LinkDev.UserManagent.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

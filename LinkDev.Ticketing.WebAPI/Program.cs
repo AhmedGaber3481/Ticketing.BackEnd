@@ -75,7 +75,7 @@ internal class Program
 
         app.MapControllers();
 
-        MappingConfig.RegisterMappings();
+        //MappingConfig.RegisterMappings();
 
         app.Run();
     }

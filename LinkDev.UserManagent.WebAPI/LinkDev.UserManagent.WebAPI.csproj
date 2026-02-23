@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.3" />
+  </ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\LinkDev.Ticketing.Core\LinkDev.Ticketing.Core.csproj" />
+	  <ProjectReference Include="..\LinkDev.Ticketing.Logging.Application\LinkDev.Ticketing.Logging.Application.csproj" />
+	  <ProjectReference Include="..\LinkDev.Ticketing.Logging.Infra\LinkDev.Ticketing.Logging.Infra.csproj" />
+	  <ProjectReference Include="..\LinkDev.Ticketing.Resources\LinkDev.Ticketing.Resources.csproj" />
+	  <ProjectReference Include="..\LinkDev.UserManagent.Application\LinkDev.UserManagent.Application.csproj" />
+	  <ProjectReference Include="..\LinkDev.UserManagent.Domain\LinkDev.UserManagent.Domain.csproj" />
+	  <ProjectReference Include="..\LinkDev.UserManagent.Infrastructure\LinkDev.UserManagent.Infrastructure.csproj" />
+	</ItemGroup>
+
+</Project>
