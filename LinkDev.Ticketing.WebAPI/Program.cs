@@ -1,14 +1,15 @@
-using Serilog;
-using Microsoft.EntityFrameworkCore;
-using LinkDev.Ticketing.Infrastructure.Data;
+using LinkDev.Ticketing.Application.Interfaces;
+using LinkDev.Ticketing.Application.IServices;
 using LinkDev.Ticketing.Application.Mapping;
+using LinkDev.Ticketing.Application.Services;
+using LinkDev.Ticketing.Core.Helpers;
+using LinkDev.Ticketing.Infrastructure.Data;
+using LinkDev.Ticketing.Infrastructure.Helpers;
+using LinkDev.Ticketing.Infrastructure.Repositories;
 using LinkDev.Ticketing.Infrastructure.Uow;
 using LinkDev.Ticketing.Logging.Infra;
-using LinkDev.Ticketing.Application.IServices;
-using LinkDev.Ticketing.Application.Services;
-using LinkDev.Ticketing.Application.Interfaces;
-using LinkDev.Ticketing.Core.Helpers;
-using LinkDev.Ticketing.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 internal class Program
 {
@@ -40,6 +41,7 @@ internal class Program
         builder.Services.AddScoped<CultureHelper>();
         builder.Services.AddScoped<ILookupRepository, LookupRepository>();
         builder.Services.AddScoped<ILookupService, LookupService>();
+        builder.Services.AddSingleton<DBHelper>();
 
         var CrossOrigin = builder.Configuration["CorsOrigin"];
 

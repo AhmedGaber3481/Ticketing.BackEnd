@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using LinkDev.Ticketing.Application.IServices;
+﻿using LinkDev.Ticketing.API.Helpers;
 using LinkDev.Ticketing.Application.Dtos;
-using LinkDev.Ticketing.API.Helpers;
+using LinkDev.Ticketing.Application.IServices;
+using LinkDev.Ticketing.Core.Helpers;
 using LinkDev.Ticketing.Core.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LinkDev.Ticketing.API.Controllers
 {
@@ -12,11 +13,13 @@ namespace LinkDev.Ticketing.API.Controllers
     {
         private readonly Logging.Application.Interfaces.ILogger _logger;
         private readonly ITicketService _ticketService;
+        private readonly string? _currentCulture;
 
-        public TicketingController(Logging.Application.Interfaces.ILogger logger, ITicketService ticketService)
+        public TicketingController(Logging.Application.Interfaces.ILogger logger, ITicketService ticketService, CultureHelper cultureHelper)
         {
             _logger = logger;
             _ticketService = ticketService;
+            _currentCulture = cultureHelper.Culture;
         }
         
         [HttpGet]
@@ -27,6 +30,7 @@ namespace LinkDev.Ticketing.API.Controllers
             try
             {
                 _logger.LogInformation("Get Tickets Page:" + requestDTO.PageNumber, "TicketingController", "GetTickets", correlationId);
+                requestDTO.Culture = _currentCulture;
                 var tickets = _ticketService.GetTickets(requestDTO);
                 
                 return ResponseMessageHelper.Ok(tickets);

@@ -1,7 +1,6 @@
 ﻿using LinkDev.Ticketing.Application.IServices;
 using LinkDev.Ticketing.Application.DTos;
 using LinkDev.Ticketing.Application.Interfaces;
-using Mapster;
 using LinkDev.Ticketing.Application.Dtos;
 using LinkDev.Ticketing.Core.Models;
 using LinkDev.Ticketing.Domain.Entities;
@@ -15,11 +14,6 @@ namespace LinkDev.Ticketing.Application.Services
     public class TicketService : ITicketService
     {
         private readonly ITicketRepository _ticketRepository;
-        //private readonly IRepository<Domain.Entities.TicketCategory> _categoryRepository;
-        //private readonly IRepository<Domain.Entities.TicketPriority> _priorityRepository;
-        //private readonly IRepository<Domain.Entities.TicketStatus> _statusRepository;
-        //private readonly IRepository<Domain.Entities.TicketSubCategory> _subCategoryRepository;
-        //private readonly IRepository<Domain.Entities.TicketType> _typeRepository;
         private readonly IRepository<Domain.Entities.TicketAttachment> _attachmentRepository;
         private readonly Logging.Application.Interfaces.ILogger _logger;
         private readonly IUnitOfWork _unitOfWork;
@@ -27,22 +21,12 @@ namespace LinkDev.Ticketing.Application.Services
 
         public TicketService(
             ITicketRepository ticketRepository,
-            //IRepository<Domain.Entities.TicketCategory> categoryRepository,
-            //IRepository<Domain.Entities.TicketPriority> priorityRepository,
-            //IRepository<Domain.Entities.TicketStatus> statusRepository,
-            //IRepository<Domain.Entities.TicketSubCategory> subCategoryRepository,
-            //IRepository<Domain.Entities.TicketType> typeRepository,
             IRepository<Domain.Entities.TicketAttachment> attachmentRepository,
             Logging.Application.Interfaces.ILogger logger,
             IUnitOfWork unitOfWork,
             FileManager fileManager)
         {
             _ticketRepository = ticketRepository;
-            //_categoryRepository = categoryRepository;
-            //_priorityRepository = priorityRepository;
-            //_statusRepository = statusRepository;
-            //_subCategoryRepository = subCategoryRepository;
-            //_typeRepository = typeRepository;
             _attachmentRepository = attachmentRepository;
             _logger = logger;
             _unitOfWork = unitOfWork;
@@ -52,46 +36,15 @@ namespace LinkDev.Ticketing.Application.Services
         public TicketSearchResult<TicketView> GetTickets(TicketRequestDTO requestDTO)
         {
             _logger.LogInformation("GetTickets", "TicketService", "GetTickets", Guid.NewGuid());
-
-            var tickets = _ticketRepository.GetTicketViews(1);
-            var totalcount = tickets.Count();//GetAll().Count();
-
-            // Pre-fetch related entities for name mapping
-            //var categories = _categoryRepository.GetAll().ToList();
-            //var priorities = _priorityRepository.GetAll().ToList();
-            //var statuses = _statusRepository.GetAll().ToList();
-            //var subCategories = _subCategoryRepository.GetAll().ToList();
-            //var types = _typeRepository.GetAll().ToList();
-
-            // Query tickets, apply search if needed
-            //var ticketQuery = _ticketRepository.GetAll();
-            //if (!string.IsNullOrEmpty(requestDTO.SearchValue))
-            //{
-            //    ticketQuery = ticketQuery.Where(x => x.Title.Contains(requestDTO.SearchValue) || x.Description.Contains(requestDTO.SearchValue));
-            //}
-
-            var ticketList = tickets
-                .Skip((requestDTO.PageNumber - 1) * requestDTO.PageSize)
-                .Take(requestDTO.PageSize)
-                .ToList();
-
-            //var list = pagedTickets.Select(x =>
-            //{
-            //    var dto = x.Adapt<TicketDTO>();
-            //    dto.Category = x.CategoryId.HasValue ? categories.FirstOrDefault(c => c.CategoryId == x.CategoryId)?.Name : null;
-            //    dto.Priority = x.PriorityId.HasValue ? priorities.FirstOrDefault(p => p.PriorityId == x.PriorityId)?.Name : null;
-            //    dto.Status = x.StatusId.HasValue ? statuses.FirstOrDefault(s => s.StatusId == x.StatusId)?.Name : null;
-            //    dto.SubCategory = x.SubCategoryId.HasValue ? subCategories.FirstOrDefault(sc => sc.SubCategoryId == x.SubCategoryId)?.Name : null;
-            //    dto.Type = x.TypeId.HasValue ? types.FirstOrDefault(t => t.TypeId == x.TypeId)?.Name : null;
-            //    return dto;
-            //}).ToList();
+            
+            var tickets = _ticketRepository.GetTickets(requestDTO, out int totalCount);
 
             return new TicketSearchResult<TicketView>
             {
                 PageNumber = requestDTO.PageNumber,
                 PageSize = requestDTO.PageSize,
-                Items = ticketList,
-                TotalCount = totalcount
+                Items = tickets,
+                TotalCount = totalCount
             };
         }
 

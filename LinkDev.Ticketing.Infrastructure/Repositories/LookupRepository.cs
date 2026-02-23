@@ -19,22 +19,21 @@ namespace LinkDev.Ticketing.Infrastructure.Repositories
             _memoryCache = memoryCache;
         }
 
-        public IEnumerable<LookupDTO>? GetLookup<T>(string lookupType, string culture) where T : BaseLookup
+        public List<LookupDTO> GetLookup<T>(string lookupType, string culture) where T : BaseLookup
         {
-            //string cacheKey = $"{lookupType}_{culture}";
-            //if (!_memoryCache.TryGetValue(cacheKey, out IEnumerable<LookupDTO>? lookupItems))
-            //{
-            //    lookupItems = GetAll<T>(culture);
-            //    _memoryCache.Set(cacheKey, lookupItems, TimeSpan.FromHours(1));
-            //}
-            //return lookupItems;
-            return GetAll<T>(culture);
+            string cacheKey = $"{lookupType}_{culture}";
+            if (!_memoryCache.TryGetValue(cacheKey, out List<LookupDTO>? lookupItems))
+            {
+                lookupItems = GetAll<T>(culture);
+                _memoryCache.Set(cacheKey, lookupItems, TimeSpan.FromHours(1));
+            }
+            return lookupItems ?? new List<LookupDTO>();
         }
 
-        private IEnumerable<LookupDTO> GetAll<T>(string culture) where T : BaseLookup
+        private List<LookupDTO> GetAll<T>(string culture) where T : BaseLookup
         {
             short langId = culture.ToLower() == "en-us" ? (short)1 : (short)2;
-            return _ticketingContext.Set<T>().Where(x => !x.IsDeleted && x.LangId == langId).Select(x => x.ToLookupDTO());
+            return _ticketingContext.Set<T>().Where(x => !x.IsDeleted && x.LangId == langId).Select(x => x.ToLookupDTO()).ToList();
         }
     }
 }

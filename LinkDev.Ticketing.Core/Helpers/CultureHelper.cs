@@ -11,7 +11,7 @@ namespace LinkDev.Ticketing.Core.Helpers
         {
             if(httpContextAccessor.HttpContext.Request.Headers.TryGetValue("Accept-Language", out var culture))
             {
-               Culture = culture.ToString();
+               Culture = culture.ToString().Split(',', StringSplitOptions.RemoveEmptyEntries)[0];
             }
         }
     }
