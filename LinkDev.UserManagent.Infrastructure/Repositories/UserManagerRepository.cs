@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 
 namespace LinkDev.UserManagent.Infrastructure.Repositories
@@ -59,11 +60,13 @@ namespace LinkDev.UserManagent.Infrastructure.Repositories
                     else if (signInResult.IsLockedOut)
                     {
                         response.Data = new LoginResultDTO() { LoginSuccess = false };
-                        response.Notifications = new string[] { "User is locked" };
+                        response.Notifications = new string[] { "Locked_User" };
+                        response.Status = (int)HttpStatusCode.Unauthorized;
                     }
                     else
                     {
-                        response.Notifications = new string[] { "Invalid user name or password" };
+                        response.Status = (int)HttpStatusCode.Unauthorized;
+                        response.Notifications = new string[] { "Invalid_Credentials" };
                     }
                 }
             }

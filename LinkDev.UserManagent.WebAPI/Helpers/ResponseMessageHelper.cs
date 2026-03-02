@@ -46,7 +46,8 @@ namespace LinkDev.UserManagent.WebAPI.Helpers
 
         public static JsonResult GetResult<T>(ResponseMessage<T> response)
         {
-            response.Status = (int)HttpStatusCode.OK;
+            if(response.Status == 0)
+                response.Status = (int)HttpStatusCode.OK;
 
             return new JsonResult(response) { StatusCode = response.Status };
         }
