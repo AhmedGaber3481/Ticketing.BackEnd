@@ -1,8 +1,9 @@
-﻿using LinkDev.Ticketing.Core.Models;
+﻿//using LinkDev.Ticketing.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Text;
 using LinkDev.Ticketing.Resources;
+using LinkDev.UserManagent.Domain.Models;
 
 namespace LinkDev.UserManagent.WebAPI.Helpers
 {
@@ -43,7 +44,7 @@ namespace LinkDev.UserManagent.WebAPI.Helpers
             return new JsonResult(errorMessage) { StatusCode = errorMessage.Status };
         }
 
-        public static JsonResult Ok<T>(ResponseMessage<T> response)
+        public static JsonResult GetResult<T>(ResponseMessage<T> response)
         {
             response.Status = (int)HttpStatusCode.OK;
 

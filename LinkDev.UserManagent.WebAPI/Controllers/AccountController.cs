@@ -1,4 +1,5 @@
-﻿using LinkDev.Ticketing.Core.Models;
+﻿using LinkDev.UserManagent.Application.Interfaces;
+using LinkDev.UserManagent.Domain.DTOs;
 using LinkDev.UserManagent.Domain.Models;
 using LinkDev.UserManagent.WebAPI.Helpers;
 using Microsoft.AspNetCore.Identity;
@@ -10,62 +11,42 @@ namespace Identity.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly LinkDev.Ticketing.Logging.Application.Interfaces.ILogger _logger;
+        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IUserManagerRepository _userManagerRepository;
 
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager,
-            LinkDev.Ticketing.Logging.Application.Interfaces.ILogger logger)
+        public AccountController(SignInManager<IdentityUser> signInManager,
+            LinkDev.Ticketing.Logging.Application.Interfaces.ILogger logger,
+            IHttpContextAccessor contextAccessor,
+            IUserManagerRepository userManagerRepository)
         {
-            _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _contextAccessor = contextAccessor;
+            _userManagerRepository = userManagerRepository;
         }
 
 
         [Route("SignIn"), HttpPost]
         public async Task<IActionResult> SignIn([FromBody]User loggedUser)
         {
-            ResponseMessage<bool> response = new ResponseMessage<bool>();
             Guid correlationId = Guid.NewGuid();
+            
             try
             {
+                ResponseMessage<LoginResultDTO>? response = null;
                 if (ModelState.IsValid)
                 {
-                    IdentityUser? user = await _userManager.FindByNameAsync(loggedUser.UserName);
-
-                    if (user != null)
-                    {
-                        var signInResult = await _signInManager.PasswordSignInAsync(user, loggedUser.Password, false, true);
-
-                        if (signInResult != null)
-                        {
-                            if (signInResult.Succeeded)
-                            {
-                                response.Data = true;
-                            }
-                            else if (signInResult.IsLockedOut)
-                            {
-                                response.Data = false;
-                                response.Notifications = new string[] { "User is locked" };
-                            }
-                            else
-                            {
-                                response.Notifications = new string[] { "Invalid user name or password" };
-                            }
-                        }
-                    }
-                    else
-                    {
-                        response.Notifications = new string[] { "Invalid user name or password" };
-                    }
+                    response = await _userManagerRepository.SignIn(loggedUser);
                 }
                 else
                 {
+                    response = new ResponseMessage<LoginResultDTO>();
                     response.Notifications = ErrorMessageHelper.GetErrorMessages(ModelState);
                 }
+                return ResponseMessageHelper.GetResult(response);
 
-                return ResponseMessageHelper.Ok(response);
             }
             catch (Exception exp)
             {
@@ -86,6 +67,32 @@ namespace Identity.Controllers
             catch (Exception exp)
             {
                 _logger.LogError(exp, "Exception in SignOut", "AccountController", "SignOut", correlationId);
+                return ResponseMessageHelper.ServerError(correlationId);
+            }
+        }
+
+        [Route("GetLoggedUser"), HttpGet]
+        public async Task<IActionResult> GetLoggedUser()
+        {
+            Guid correlationId = Guid.NewGuid();
+            try
+            {
+                ResponseMessage<LoggedUserDTO>? response = null;
+                var identityUser = _contextAccessor.HttpContext?.User?.Identity;
+                if (identityUser != null && identityUser.IsAuthenticated)
+                {
+                    response = await _userManagerRepository.GetUserDetails(identityUser.Name!);
+                }
+                else
+                {
+                    response = new ResponseMessage<LoggedUserDTO>();
+                }
+
+                return ResponseMessageHelper.GetResult(response);
+            }
+            catch (Exception exp)
+            {
+                _logger.LogError(exp, "Exception in GetLoggedUser", "AccountController", "GetLoggedUser", correlationId);
                 return ResponseMessageHelper.ServerError(correlationId);
             }
         }

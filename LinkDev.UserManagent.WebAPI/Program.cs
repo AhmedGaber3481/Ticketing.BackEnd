@@ -1,5 +1,7 @@
 using LinkDev.Ticketing.Logging.Infra;
+using LinkDev.UserManagent.Application.Interfaces;
 using LinkDev.UserManagent.Infrastructure.Data;
+using LinkDev.UserManagent.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -26,6 +28,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
+builder.Services.AddScoped<IUserManagerRepository, UserManagerRepository>();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -54,18 +57,35 @@ builder.Services.Configure<IdentityOptions>(options =>
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    // Cookie settings
+    options.Cookie.SameSite = SameSiteMode.None;   // IMPORTANT
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // REQUIRED
     options.Cookie.HttpOnly = true;
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-
-    options.LoginPath = "/Account/Login";
-    options.AccessDeniedPath = "/Account/AccessDenied";
-    options.SlidingExpiration = true;
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
 });
 
+var CrossOrigin = builder.Configuration["CorsOrigin"];
+
+if (!string.IsNullOrEmpty(CrossOrigin))
+{
+    builder.Services.AddCors(options =>
+    {
+
+        options.AddPolicy("AllowOrigin", builder =>
+        {
+            builder
+                .WithOrigins(CrossOrigin.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
+        });
+    });
+}
+
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
+app.UseCors("AllowOrigin");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

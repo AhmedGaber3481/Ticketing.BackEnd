@@ -11,7 +11,6 @@
   </ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\LinkDev.Ticketing.Core\LinkDev.Ticketing.Core.csproj" />
 	  <ProjectReference Include="..\LinkDev.Ticketing.Logging.Application\LinkDev.Ticketing.Logging.Application.csproj" />
 	  <ProjectReference Include="..\LinkDev.Ticketing.Logging.Infra\LinkDev.Ticketing.Logging.Infra.csproj" />
 	  <ProjectReference Include="..\LinkDev.Ticketing.Resources\LinkDev.Ticketing.Resources.csproj" />
