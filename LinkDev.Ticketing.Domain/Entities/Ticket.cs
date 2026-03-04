@@ -22,11 +22,12 @@ namespace LinkDev.Ticketing.Domain.Entities
         public string? ModifiedBy { get; set; }
         public DateTime? LastModifiedAt { get; set; }
 
-        //public TicketCategory? TicketCategory { get; set; }
-        //public TicketPriority? TicketPriority { get; set; }
-        //public TicketStatus? TicketStatus { get; set; }
-        ////public TicketSubCategory? TicketSubCategory { get; set; }
-        //public TicketType? TicketType { get; set; }
+        public TicketCategory? TicketCategory { get; set; }
+        public TicketPriority? TicketPriority { get; set; }
+        public TicketStatus? TicketStatus { get; set; }
+        //public TicketSubCategory? TicketSubCategory { get; set; }
+        public TicketType? TicketType { get; set; }
+
         //public ICollection<TicketTransaction>? TicketTransactions { get; set; }
     }
 

@@ -12,9 +12,8 @@ namespace LinkDev.Ticketing.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.ApplyConfigurationsFromAssembly(typeof(TicketingContext).Assembly);
-
             modelBuilder.Entity<Ticket>().ToTable("Ticket").HasKey(t => t.Id);
+
             modelBuilder.Entity<TicketAttachment>().ToTable("TicketAttachment").HasKey(t => t.Id);
 
             //modelBuilder.Entity<TicketCategory>().ToTable("TicketCategory").HasKey(t => new {t.Code, t.LangId});
@@ -37,6 +36,11 @@ namespace LinkDev.Ticketing.Infrastructure.Data
             modelBuilder.Entity<TicketTransactionType>().ToTable("TicketTransactionType").HasKey(t => t.TypeId);
             modelBuilder.Entity<TicketTransactionStatus>().ToTable("TicketTransactionStatus").HasKey(t => t.StatusId);
 
+            modelBuilder.Entity<Ticket>().ToTable("Ticket").HasOne(e => e.TicketType).WithMany(e => e.Tickets).HasForeignKey(e => e.Type);
+            modelBuilder.Entity<Ticket>().ToTable("Ticket").HasOne(e => e.TicketStatus).WithMany(e => e.Tickets).HasForeignKey(e => e.Status);
+            modelBuilder.Entity<Ticket>().ToTable("Ticket").HasOne(e => e.TicketCategory).WithMany(e => e.Tickets).HasForeignKey(e => e.Category);
+            modelBuilder.Entity<Ticket>().ToTable("Ticket").HasOne(e => e.TicketPriority).WithMany(e => e.Tickets).HasForeignKey(e => e.Priority);
+
             modelBuilder.Entity<TicketTransaction>().ToTable("TicketTransaction").HasKey(t => t.Id);
             modelBuilder.Entity<TicketTransaction>().HasOne(e => e.Ticket).WithMany().HasForeignKey(e => e.TicketId);
             modelBuilder.Entity<TicketTransaction>().HasOne(e => e.TicketTransactionStatus).WithMany().HasForeignKey(e => e.StatusId);
@@ -57,6 +61,7 @@ namespace LinkDev.Ticketing.Infrastructure.Data
         public DbSet<TicketCategory> TicketCategories { get; set; }
         public DbSet<TicketPriority> TicketPriorities { get; set; }
         public DbSet<TicketStatus> TicketStatuses { get; set; }
+
         //public DbSet<TicketSubCategory> TicketSubCategories { get; set; }
         public DbSet<TicketTransaction> TicketTransactions { get; set; }
         public DbSet<TicketTransactionStatus> TicketTransactionStatuses { get; set; }
