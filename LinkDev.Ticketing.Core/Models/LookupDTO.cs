@@ -8,6 +8,7 @@ namespace LinkDev.Ticketing.Core.Models
 {
     public class LookupDTO
     {
+        public int Id { get; set; }
         public required string Code { get; set; }
         public required string Name { get; set; }
         public short LangId { get; set; }

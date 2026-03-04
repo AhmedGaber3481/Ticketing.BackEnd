@@ -20,15 +20,15 @@ namespace LinkDev.Ticketing.Application.Services
                 switch (_lookupType)
                 {
                     case LookupType.TicketType:
-                        return _lookupRepository.GetLookup<TicketType>(lookupType, culture);
+                        return _lookupRepository.GetLookup<TicketTypeLookup>(lookupType, culture);
                     case LookupType.TicketCategory:
-                        return _lookupRepository.GetLookup<TicketCategory>(lookupType, culture);
-                    case LookupType.TicketSubCategory:
-                        return _lookupRepository.GetLookup<TicketSubCategory>(lookupType, culture);
+                        return _lookupRepository.GetLookup<TicketCategoryLookup>(lookupType, culture);
+                    //case LookupType.TicketSubCategory:
+                    //    return _lookupRepository.GetLookup<TicketSubCategory>(lookupType, culture);
                     case LookupType.TicketPriority:
-                        return _lookupRepository.GetLookup<TicketPriority>(lookupType, culture);
+                        return _lookupRepository.GetLookup<TicketPriorityLookup>(lookupType, culture);
                     case LookupType.TicketStatus:
-                        return _lookupRepository.GetLookup<TicketStatus>(lookupType, culture);
+                        return _lookupRepository.GetLookup<TicketStatusLookup>(lookupType, culture);
                     default:
                         throw new ArgumentException("Invalid lookup type");
                 }

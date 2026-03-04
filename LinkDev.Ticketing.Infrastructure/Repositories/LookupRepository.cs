@@ -3,9 +3,6 @@ using LinkDev.Ticketing.Core.Models;
 using LinkDev.Ticketing.Domain.Entities;
 using LinkDev.Ticketing.Infrastructure.Data;
 using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LinkDev.Ticketing.Infrastructure.Repositories
 {
@@ -33,7 +30,11 @@ namespace LinkDev.Ticketing.Infrastructure.Repositories
         private List<LookupDTO> GetAll<T>(string culture) where T : BaseLookup
         {
             short langId = culture.ToLower() == "en-us" ? (short)1 : (short)2;
-            return _ticketingContext.Set<T>().Where(x => !x.IsDeleted && x.LangId == langId).Select(x => x.ToLookupDTO()).ToList();
+            var lookupItems = _ticketingContext.Set<T>().Where(x => !x.IsDeleted && x.LangId == langId)
+                .AsEnumerable()
+                .Select(x => x.ToLookupDTO())
+                .ToList();
+            return lookupItems;
         }
     }
 }

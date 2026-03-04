@@ -4,11 +4,7 @@ using LinkDev.Ticketing.Domain.Entities;
 using LinkDev.Ticketing.Infrastructure.Data;
 using LinkDev.Ticketing.Infrastructure.Helpers;
 using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Text;
 
 namespace LinkDev.Ticketing.Infrastructure.Repositories
 {

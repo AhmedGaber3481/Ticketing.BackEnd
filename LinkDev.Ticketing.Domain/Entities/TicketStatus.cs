@@ -3,21 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LinkDev.Ticketing.Domain.Entities
 {
-    public class TicketStatus : BaseLookup
+    public class TicketStatus
     {
+        public int Id { get; set; }
         public required string Code { get; set; }
-        [Required]
-        [MaxLength(100)]
-        public required string Name { get; set; }
-
-        public override LookupDTO ToLookupDTO()
-        {
-            return new LookupDTO
-            {
-                Code = this.Code,
-                Name = this.Name,
-                LangId = this.LangId
-            };
-        }
+        public bool IsDeleted { get; set; }
     }
 }
