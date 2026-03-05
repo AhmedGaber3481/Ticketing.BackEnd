@@ -8,9 +8,9 @@
         public string? SortBy { get; set; }
         public string? SortDirection { get; set; }
         public string? Culture { get; set; }
-        public string? TicketType { get; set; }
-        public string? TicketStatus { get; set; }
-        public string? TicketPriority { get; set; }
-        public string? TicketCategory { get; set; }
+        public int? TicketType { get; set; }
+        public int? TicketStatus { get; set; }
+        public int? TicketPriority { get; set; }
+        public int? TicketCategory { get; set; }
     }
 }

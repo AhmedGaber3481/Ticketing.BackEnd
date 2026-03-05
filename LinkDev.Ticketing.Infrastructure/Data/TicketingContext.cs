@@ -16,11 +16,6 @@ namespace LinkDev.Ticketing.Infrastructure.Data
 
             modelBuilder.Entity<TicketAttachment>().ToTable("TicketAttachment").HasKey(t => t.Id);
 
-            //modelBuilder.Entity<TicketCategory>().ToTable("TicketCategory").HasKey(t => new {t.Code, t.LangId});
-            //modelBuilder.Entity<TicketPriority>().ToTable("TicketPriority").HasKey(t => new { t.Code, t.LangId });
-            //modelBuilder.Entity<TicketStatus>().ToTable("TicketStatus").HasKey(t => new { t.Code, t.LangId });
-            //modelBuilder.Entity<TicketType>().ToTable("TicketType").HasKey(t => new { t.Code, t.LangId });
-
             modelBuilder.Entity<TicketCategory>().ToTable("TicketCategory").HasKey(t => t.Id);
             modelBuilder.Entity<TicketPriority>().ToTable("TicketPriority").HasKey(t => t.Id);
             modelBuilder.Entity<TicketStatus>().ToTable("TicketStatus").HasKey(t => t.Id);
@@ -30,8 +25,7 @@ namespace LinkDev.Ticketing.Infrastructure.Data
             modelBuilder.Entity<TicketStatusLookup>().ToView("TicketStatusLookup").HasNoKey();
             modelBuilder.Entity<TicketPriorityLookup>().ToView("TicketPriorityLookup").HasNoKey();
             modelBuilder.Entity<TicketTypeLookup>().ToView("TicketTypeLookup").HasNoKey();
-
-            //modelBuilder.Entity<TicketSubCategory>().ToTable("TicketSubCategory").HasKey(t => new { t.Code, t.LangId });
+            modelBuilder.Entity<ScalarInt>().HasNoKey();
 
             modelBuilder.Entity<TicketTransactionType>().ToTable("TicketTransactionType").HasKey(t => t.TypeId);
             modelBuilder.Entity<TicketTransactionStatus>().ToTable("TicketTransactionStatus").HasKey(t => t.StatusId);

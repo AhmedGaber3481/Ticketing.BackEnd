@@ -14,8 +14,6 @@ namespace LinkDev.Ticketing.Infrastructure.Repositories
         {
             dbSet = dbContext.Set<T>();
             _dBContext = dbContext;
-
-            //_dBContext.Database.SqlQueryRaw
         }
 
         public void Add(T entity)
