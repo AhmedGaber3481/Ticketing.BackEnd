@@ -16,20 +16,22 @@ namespace LinkDev.Ticketing.Application.DTos
         [MaxLengthExtension(1000, ErrorMessageResourceName = "MaxLengthField")]
         public string? Description { get; set; }
 
-        [RequiredExtension(ErrorMessageResourceName = "RequiredField")]
-        [DataTypeExtension(DataType.PhoneNumber, ErrorMessageResourceName = "PhoneNumberField")]
-        public string PhoneNumber { get; set; }
+        //[RequiredExtension(ErrorMessageResourceName = "RequiredField")]
+        //[DataTypeExtension(DataType.PhoneNumber, ErrorMessageResourceName = "PhoneNumberField")]
+        //public string? PhoneNumber { get; set; }
 
-        [RequiredExtension(ErrorMessageResourceName = "RequiredField")]
-        [EmailValidation(ErrorMessageResourceName = "EmailValidationField")]
-        [MaxLengthExtension(100, ErrorMessageResourceName = "MaxLengthField")]
-        public string Email { get; set; }
+        //[RequiredExtension(ErrorMessageResourceName = "RequiredField")]
+        //[EmailValidation(ErrorMessageResourceName = "EmailValidationField")]
+        //[MaxLengthExtension(100, ErrorMessageResourceName = "MaxLengthField")]
+        //public string? Email { get; set; }
 
-        public int? CategoryId { get; set; }
-        public int? PriorityId { get; set; }
-        public int? StatusId { get; set; }
-        public int? SubCategoryId { get; set; }
-        public int? TypeId { get; set; }
+        public DateTime? CreatedAt { get; set; }
+
+        //public int? Category { get; set; }
+        //public int? Priority { get; set; }
+        //public int? Status { get; set; }
+        //public int? SubCategory { get; set; }
+        //public int? Type { get; set; }
 
         public string? Category { get; set; }
         public string? Priority { get; set; }

@@ -2,7 +2,6 @@
 using LinkDev.Ticketing.Core.Models;
 using LinkDev.Ticketing.Domain.Entities;
 using LinkDev.Ticketing.Infrastructure.Data;
-using LinkDev.Ticketing.Infrastructure.Helpers;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
@@ -123,38 +122,8 @@ namespace LinkDev.Ticketing.Infrastructure.Repositories
             sqlParameters.Add(new SqlParameter("@SortDir", requestDTO.SortDirection));
 
             List<TicketView> tickets = _dBContext.Database.SqlQueryRaw<TicketView>(query.ToString(),sqlParameters.ToArray()).ToList();
+
             return tickets;
-
-            //DataSet result =_dBHelper.GetDataSetFromSP(null, "GetTickets",
-            //    new SqlParameter("@Lang", requestDTO.Culture?.ToLower() == "en-us" ? (short)1 : (short)2),
-            //    new SqlParameter("@PageNumber", requestDTO.PageNumber), 
-            //    new SqlParameter("@PageSize", requestDTO.PageSize), 
-            //    new SqlParameter("@SearchValue", requestDTO.SearchValue ?? string.Empty), 
-            //    new SqlParameter("@SortBy", requestDTO.SortBy ?? string.Empty), 
-            //    new SqlParameter("@SortDir", requestDTO.SortDirection ?? string.Empty));
-
-            //totalCount = Convert.ToInt32(result.Tables[0].Rows[0]["CountRows"]);
-
-            //List<TicketView> tickets = new List<TicketView>();
-            //foreach (DataRow row in result.Tables[1].Rows)
-            //{
-            //    tickets.Add(new TicketView
-            //    {
-            //        Id = Convert.ToInt32(row["Id"]),
-            //        Title = row["Title"].ToString(),
-            //        Description = row["Description"].ToString(),
-            //        CreatedBy = row["CreatedBy"].ToString(),
-            //        CreatedAt = Convert.ToDateTime(row["CreatedAt"]),
-            //        ModifiedBy = row["ModifiedBy"].ToString(),
-            //        LastModifiedAt = row["LastModifiedAt"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(row["LastModifiedAt"]),
-            //        Status = row["Status"].ToString(),
-            //        Priority = row["Priority"].ToString(),
-            //        TicketType = row["TicketType"].ToString(),
-            //        TicketCategory = row["TicketCategory"].ToString()
-            //    });
-            //}
-            //return tickets;
-            //return _dBContext.Database.SqlQueryRaw<TicketView>("execute GetTickets @Lang", new SqlParameter("@Lang" , LangCode));
         }
     }
 }

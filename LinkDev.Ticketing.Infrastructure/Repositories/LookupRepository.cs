@@ -1,6 +1,7 @@
 ﻿using LinkDev.Ticketing.Application.Interfaces;
 using LinkDev.Ticketing.Core.Models;
 using LinkDev.Ticketing.Domain.Entities;
+using LinkDev.Ticketing.Domain.Enums;
 using LinkDev.Ticketing.Infrastructure.Data;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -35,6 +36,16 @@ namespace LinkDev.Ticketing.Infrastructure.Repositories
                 .Select(x => x.ToLookupDTO())
                 .ToList();
             return lookupItems;
+        }
+
+        public int? GetLookupItemId<T>(LookupType lookupType, string itemCode, string culture) where T : BaseLookup
+        {
+            var list = GetLookup<T>(lookupType.ToString(), culture);
+            if(list != null)
+            {
+                return list.FirstOrDefault(x => x.Code ==  itemCode)?.Id;
+            }
+            return null;
         }
     }
 }

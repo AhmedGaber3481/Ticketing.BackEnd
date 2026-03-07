@@ -8,7 +8,7 @@ using System.Net;
 
 namespace Identity.Controllers
 {
-    [Route("api/account")]
+    [Route("api/Account")]
     [ApiController]
     public class AccountController : ControllerBase
     {

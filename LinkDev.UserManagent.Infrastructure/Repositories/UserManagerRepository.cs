@@ -35,7 +35,12 @@ namespace LinkDev.UserManagent.Infrastructure.Repositories
             {
                 var userDetails = _applicationDbContext.UserDetails.Where(x => x.UserId == user.Id).FirstOrDefault();
 
-                response.Data = new LoggedUserDTO() { UserFullName = userDetails?.FullName, UserId = user.Id };
+                response.Data = new LoggedUserDTO() {
+                    UserFullName = user.UserName,
+                    UserId = userDetails?.UserId,
+                    Email = user.Email,
+                    PhoneNumber = user.PhoneNumber
+                };
             }
             return response;
         }
@@ -55,7 +60,13 @@ namespace LinkDev.UserManagent.Infrastructure.Repositories
                     {
                         var userDetails = _applicationDbContext.UserDetails.Where(x => x.UserId == user.Id).FirstOrDefault();
 
-                        response.Data = new LoginResultDTO() { LoginSuccess = true, UserFullName = user.UserName, UserId = userDetails?.UserId };
+                        response.Data = new LoginResultDTO() { 
+                            LoginSuccess = true,
+                            UserFullName = user.UserName,
+                            UserId = userDetails?.UserId,
+                            Email = user.Email,
+                            PhoneNumber = user.PhoneNumber
+                        };
                     }
                     else if (signInResult.IsLockedOut)
                     {

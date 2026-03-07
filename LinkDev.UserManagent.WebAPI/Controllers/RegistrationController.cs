@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.Controllers
 {
-    [Route("api/registration")]
+    [Route("api/Registration")]
     [ApiController]
     public class RegistrationController : ControllerBase
     {

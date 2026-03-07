@@ -1,36 +1,41 @@
-﻿using LinkDev.Ticketing.Application.IServices;
+﻿using LinkDev.Ticketing.Application.Dtos;
 using LinkDev.Ticketing.Application.DTos;
 using LinkDev.Ticketing.Application.Interfaces;
-using LinkDev.Ticketing.Application.Dtos;
+using LinkDev.Ticketing.Application.IServices;
+using LinkDev.Ticketing.Core.Helpers;
 using LinkDev.Ticketing.Core.Models;
 using LinkDev.Ticketing.Domain.Entities;
-using System.Net;
-using Microsoft.EntityFrameworkCore.Storage;
+using LinkDev.Ticketing.Domain.Enums;
 using Microsoft.AspNetCore.Http;
-using LinkDev.Ticketing.Core.Helpers;
+using Microsoft.EntityFrameworkCore.Storage;
+using System.Net;
+using System.Text.RegularExpressions;
 
 namespace LinkDev.Ticketing.Application.Services
 {
     public class TicketService : ITicketService
     {
         private readonly ITicketRepository _ticketRepository;
-        private readonly IRepository<Domain.Entities.TicketAttachment> _attachmentRepository;
+        private readonly IRepository<TicketAttachment> _attachmentRepository;
         private readonly Logging.Application.Interfaces.ILogger _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly FileManager _fileManager;
+        private readonly ILookupRepository _lookupRepository;
 
         public TicketService(
             ITicketRepository ticketRepository,
-            IRepository<Domain.Entities.TicketAttachment> attachmentRepository,
+            IRepository<TicketAttachment> attachmentRepository,
             Logging.Application.Interfaces.ILogger logger,
             IUnitOfWork unitOfWork,
-            FileManager fileManager)
+            FileManager fileManager,
+            ILookupRepository lookupRepository)
         {
             _ticketRepository = ticketRepository;
             _attachmentRepository = attachmentRepository;
             _logger = logger;
             _unitOfWork = unitOfWork;
             _fileManager = fileManager;
+            _lookupRepository = lookupRepository;
         }
 
         public TicketSearchResult<TicketView> GetTickets(TicketRequestDTO requestDTO)
@@ -48,36 +53,28 @@ namespace LinkDev.Ticketing.Application.Services
             };
         }
 
-        public ResponseMessage<bool> SaveTicket(TicketDTO ticketDTO, Guid correlationId)
+        public ResponseMessage<bool> SaveTicket(TicketDTO ticketDTO, string culture,  Guid correlationId)
         {
-            ResponseMessage<bool> response = null;
+            ResponseMessage<bool>? response = null;
             IDbContextTransaction? transaction = null;
             try
             {
                 _logger.LogInformation("Save Ticket before validate: " + ticketDTO.Title, "TicketingService", "AddTicket", correlationId);
 
-                //response = ValidateTicket(ticketDTO);
-
-                //if (!response.Data)
-                //{
-                //    return response;
-                //}
-
                 transaction = _unitOfWork.BeginTransaction();
                 Ticket? ticket = _ticketRepository.GetById(ticketDTO.Id);
-                if (ticket != null)
-                {
-                    ticket = MapTicket(ticketDTO, ticket);
-                    ticket.CreatedAt = DateTime.Now;
-                    _ticketRepository.Update(ticket);
-                }
-                else
-                {
-                    ticket = MapTicket(ticketDTO);
+                //if (ticket != null)
+                //{
+                //    ticket = MapTicket(ticketDTO, ticket, culture);
+                //    ticket.CreatedAt = DateTime.Now;
+                //    _ticketRepository.Update(ticket);
+                //}
+                //else
+                //{
+                    ticket = MapTicket(ticketDTO, culture);
                     ticket.CreatedAt = DateTime.Now;
                     _ticketRepository.Add(ticket);
-                }
-
+                //}
 
                 _unitOfWork.SaveChanges();
 
@@ -86,6 +83,7 @@ namespace LinkDev.Ticketing.Application.Services
                 _unitOfWork.SaveChanges();
                 transaction.Commit();
 
+                response = new ResponseMessage<bool>();
                 response.Status = (int)HttpStatusCode.OK;
                 response.Data = true;
                 _logger.LogInformation("The ticket is added successfully with title : " + ticket.Title, "TicketingService", "AddTicket", correlationId);
@@ -108,63 +106,35 @@ namespace LinkDev.Ticketing.Application.Services
             return response;
         }
 
-        //private ResponseMessage<bool> ValidateTicket(TicketDTO ticketDTO)
-        //{
-        //    ResponseMessage<bool> response = new ResponseMessage<bool>();
-        //    response.Data = true;
-
-        //    // Validate related entities exist
-        //    if (ticketDTO.CategoryId.HasValue && !_categoryRepository.GetAll().Any(c => c.CategoryId == ticketDTO.CategoryId))
-        //    {
-        //        response.Status = (int)HttpStatusCode.BadRequest;
-        //        response.Notifications = ["Invalid Category ID"];
-        //        response.Data = false;
-        //    }
-        //    else if (ticketDTO.PriorityId.HasValue && !_priorityRepository.GetAll().Any(p => p.PriorityId == ticketDTO.PriorityId))
-        //    {
-        //        response.Status = (int)HttpStatusCode.BadRequest;
-        //        response.Notifications = ["Invalid Priority ID"];
-        //        response.Data = false;
-        //    }
-        //    else if (ticketDTO.StatusId.HasValue && !_statusRepository.GetAll().Any(s => s.StatusId == ticketDTO.StatusId))
-        //    {
-        //        response.Status = (int)HttpStatusCode.BadRequest;
-        //        response.Notifications = ["Invalid Status ID"];
-        //        response.Data = false;
-        //    }
-        //    else if (ticketDTO.SubCategoryId.HasValue && !_subCategoryRepository.GetAll().Any(sc => sc.SubCategoryId == ticketDTO.SubCategoryId))
-        //    {
-        //        response.Status = (int)HttpStatusCode.BadRequest;
-        //        response.Notifications = ["Invalid SubCategory ID"];
-        //        response.Data = false;
-        //    }
-        //    else if (ticketDTO.TypeId.HasValue && !_typeRepository.GetAll().Any(t => t.TypeId == ticketDTO.TypeId))
-        //    {
-        //        response.Status = (int)HttpStatusCode.BadRequest;
-        //        response.Notifications = ["Invalid Type ID"];
-        //        response.Data = false;
-        //    }
-
-        //    return response;
-        //}
-
-        private Ticket MapTicket(TicketDTO source, Ticket? destination)
+        private Ticket MapTicket(TicketDTO source, string culture)
         {
-            Ticket ticket = destination == null ? new Ticket() { Title = string.Empty} : destination;
-            ticket.Title = source.Title ?? string.Empty;
+            //Ticket ticket = destination == null ? new Ticket() { Title = string.Empty} : destination;
+            Ticket ticket = new Ticket() { Title = source.Title ?? string.Empty };
             ticket.Description = source.Description;
-            //ticket.CategoryId = source.CategoryId;
-            //ticket.PriorityId = source.PriorityId;
-            //ticket.StatusId = source.StatusId;
-            //ticket.SubCategoryId = source.SubCategoryId;
-            //ticket.TypeId = source.TypeId;
+            if (!string.IsNullOrEmpty(source.Category))
+            {
+                ticket.Category = _lookupRepository.GetLookupItemId<TicketCategoryLookup>(LookupType.TicketCategory, source.Category, culture);
+            }
+            if (!string.IsNullOrEmpty(source.Type))
+            {
+                ticket.Type = _lookupRepository.GetLookupItemId<TicketTypeLookup>(LookupType.TicketType, source.Type, culture);
+            }
+            if (!string.IsNullOrEmpty(source.Priority))
+            {
+                ticket.Priority = _lookupRepository.GetLookupItemId<TicketPriorityLookup>(LookupType.TicketPriority, source.Priority, culture);
+            }
+            if (!string.IsNullOrEmpty(source.Status))
+            {
+                ticket.Status = _lookupRepository.GetLookupItemId<TicketStatusLookup>(LookupType.TicketStatus, source.Status, culture);
+            }
+
             return ticket;
         }
 
-        private Ticket MapTicket(TicketDTO source)
-        {
-            return MapTicket(source, null);
-        }
+        //private Ticket MapTicket(TicketDTO source, string culture)
+        //{
+        //    return MapTicket(source, null, culture);
+        //}
 
         private void SaveAttachments(IFormFile[]? attachments, int ticketId)
         {

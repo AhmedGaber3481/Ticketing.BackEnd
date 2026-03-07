@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LinkDev.Ticketing.API.Controllers
 {
-    [Route("Ticketing")]
+    [Route("api/Ticketing")]
     [ApiController]
     public class TicketingController : ControllerBase
     {
