@@ -63,18 +63,17 @@ namespace LinkDev.Ticketing.Application.Services
 
                 transaction = _unitOfWork.BeginTransaction();
                 Ticket? ticket = _ticketRepository.GetById(ticketDTO.Id);
-                //if (ticket != null)
-                //{
-                //    ticket = MapTicket(ticketDTO, ticket, culture);
-                //    ticket.CreatedAt = DateTime.Now;
-                //    _ticketRepository.Update(ticket);
-                //}
-                //else
-                //{
-                    ticket = MapTicket(ticketDTO, culture);
-                    ticket.CreatedAt = DateTime.Now;
+                if (ticket != null)
+                {
+                    MapTicket(ticketDTO, ref ticket, culture);
+                    _ticketRepository.Update(ticket);
+                }
+                else
+                {
+                    MapTicket(ticketDTO, ref ticket!, culture);
+                    ticket.CreatedAt = ticketDTO.CreatedAt.HasValue ? ticketDTO.CreatedAt.Value : DateTime.Now;
                     _ticketRepository.Add(ticket);
-                //}
+                }
 
                 _unitOfWork.SaveChanges();
 
@@ -101,36 +100,86 @@ namespace LinkDev.Ticketing.Application.Services
                 {
                    transaction.Rollback();
                 }
-                _logger.LogError(exp, "Exception in adding the ticket", "TicketingService", "AddTicket", correlationId);                
+                _logger.LogError(exp, "Exception in adding the ticket", "TicketingService", "AddTicket", correlationId);         
             }
             return response;
         }
 
-        private Ticket MapTicket(TicketDTO source, string culture)
+        public ResponseMessage<TicketDTO> GetTicket(int ticketId, string culture, Guid correlationId)
         {
-            //Ticket ticket = destination == null ? new Ticket() { Title = string.Empty} : destination;
-            Ticket ticket = new Ticket() { Title = source.Title ?? string.Empty };
-            ticket.Description = source.Description;
+            try
+            {
+                var ticket = _ticketRepository.GetById(ticketId);
+                if(ticket == null)
+                {
+                    return new ResponseMessage<TicketDTO>() { Status = (int)HttpStatusCode.NotFound};
+                }
+                var ticketDTO = MapTicket(ticket, culture);
+
+                return new ResponseMessage<TicketDTO>() { Data = ticketDTO };
+            }
+            catch (Exception exp)
+            {
+                _logger.LogError(exp, "Exception in adding the ticket", "TicketingService", "GetTicket", correlationId);
+
+                return new ResponseMessage<TicketDTO>() { Status =  (int)HttpStatusCode.InternalServerError };
+            }
+        }
+
+        private void MapTicket(TicketDTO source, ref Ticket destination, string culture)
+        {
+            if(destination == null)
+            {
+               destination = new Ticket() { Title = string.Empty };
+            }
+            destination.Title = source.Title ?? string.Empty;
+            destination.Description = source.Description;
             if (!string.IsNullOrEmpty(source.Category))
             {
-                ticket.Category = _lookupRepository.GetLookupItemId<TicketCategoryLookup>(LookupType.TicketCategory, source.Category, culture);
+                destination.Category = _lookupRepository.GetLookupItemId<TicketCategoryLookup>(LookupType.TicketCategory, source.Category, culture);
             }
             if (!string.IsNullOrEmpty(source.Type))
             {
-                ticket.Type = _lookupRepository.GetLookupItemId<TicketTypeLookup>(LookupType.TicketType, source.Type, culture);
+                destination.Type = _lookupRepository.GetLookupItemId<TicketTypeLookup>(LookupType.TicketType, source.Type, culture);
             }
             if (!string.IsNullOrEmpty(source.Priority))
             {
-                ticket.Priority = _lookupRepository.GetLookupItemId<TicketPriorityLookup>(LookupType.TicketPriority, source.Priority, culture);
+                destination.Priority = _lookupRepository.GetLookupItemId<TicketPriorityLookup>(LookupType.TicketPriority, source.Priority, culture);
             }
             if (!string.IsNullOrEmpty(source.Status))
             {
-                ticket.Status = _lookupRepository.GetLookupItemId<TicketStatusLookup>(LookupType.TicketStatus, source.Status, culture);
+                destination.Status = _lookupRepository.GetLookupItemId<TicketStatusLookup>(LookupType.TicketStatus, source.Status, culture);
             }
-
-            return ticket;
         }
 
+        private TicketDTO MapTicket(Ticket ticket, string culture)
+        {
+            TicketDTO ticketDTO = new TicketDTO()
+            {
+                Title = ticket.Title,
+                Description = ticket.Description,
+                CreatedAt = ticket.CreatedAt,
+                Id = ticket.Id
+            };
+            if (ticket.Category > 0)
+            {
+                ticketDTO.Category = _lookupRepository.GetLookupItemCode<TicketCategoryLookup>(LookupType.TicketCategory, ticket.Category, culture);
+            }
+            if (ticket.Priority > 0)
+            {
+                ticketDTO.Priority = _lookupRepository.GetLookupItemCode<TicketPriorityLookup>(LookupType.TicketPriority, ticket.Priority, culture);
+            }
+            if (ticket.Type > 0)
+            {
+                ticketDTO.Type = _lookupRepository.GetLookupItemCode<TicketTypeLookup>(LookupType.TicketType, ticket.Type, culture);
+            }
+            if (ticket.Status > 0)
+            {
+                ticketDTO.Status = _lookupRepository.GetLookupItemCode<TicketStatusLookup>(LookupType.TicketStatus, ticket.Status, culture);
+            }
+
+            return ticketDTO;
+        }
         //private Ticket MapTicket(TicketDTO source, string culture)
         //{
         //    return MapTicket(source, null, culture);

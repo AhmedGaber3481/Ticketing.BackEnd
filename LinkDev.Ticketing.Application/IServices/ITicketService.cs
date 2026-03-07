@@ -8,6 +8,7 @@ namespace LinkDev.Ticketing.Application.IServices
     public interface ITicketService
     {
         TicketSearchResult<TicketView> GetTickets(TicketRequestDTO requestDTO);
-        ResponseMessage<bool> SaveTicket(TicketDTO ticketDTO, Guid correlationId);
+        ResponseMessage<bool> SaveTicket(TicketDTO ticketDTO, string culture, Guid correlationId);
+        ResponseMessage<TicketDTO> GetTicket(int ticketId, string culture, Guid correlationId);
     }
 }

@@ -1,5 +1,4 @@
 ﻿using LinkDev.Ticketing.API.Helpers;
-using LinkDev.Ticketing.Application.Dtos;
 using LinkDev.Ticketing.Application.IServices;
 using LinkDev.Ticketing.Core.Helpers;
 using LinkDev.Ticketing.Core.Models;
@@ -53,10 +52,30 @@ namespace LinkDev.Ticketing.API.Controllers
                 if (!ModelState.IsValid)
                     return ResponseMessageHelper.BadRequest(ResponseErrorMessage.GetErrorMessages(ModelState));
 
-                _logger.LogInformation("Add Ticket with Title: " + ticketDTO.Title, "TicketingController", "AddTicket", correlationId);
-                var response = _ticketService.SaveTicket(ticketDTO, correlationId);
+                _logger.LogInformation(ticketDTO, "TicketingController", "AddTicket", correlationId);
+                var response = _ticketService.SaveTicket(ticketDTO, _currentCulture!, correlationId);
 
-                return ResponseMessageHelper.Ok(response);
+                return ResponseMessageHelper.GetResult(response);
+            }
+            catch (Exception exp)
+            {
+                _logger.LogError(exp, "Exception in adding Ticket", "TicketingController", "AddTicket", correlationId);
+
+                return ResponseMessageHelper.ServerError(correlationId);
+            }
+        }
+
+        [HttpGet]
+        [Route("GetTicket/{ticketId}")]
+        public ActionResult GetTicket(int? ticketId) 
+        {
+            Guid correlationId = Guid.NewGuid();
+            try
+            {
+                _logger.LogInformation("TicketId", "TicketingController", "GetTicket", correlationId, id1: ticketId?.ToString());
+                var response = _ticketService.GetTicket(ticketId ?? 0, _currentCulture!, correlationId);
+
+                return ResponseMessageHelper.GetResult(response);
             }
             catch (Exception exp)
             {

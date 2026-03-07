@@ -47,5 +47,18 @@ namespace LinkDev.Ticketing.Infrastructure.Repositories
             }
             return null;
         }
+
+        public string? GetLookupItemCode<T>(LookupType lookupType, int? itemId, string culture) where T : BaseLookup
+        {
+            if (itemId.HasValue)
+            {
+                var list = GetLookup<T>(lookupType.ToString(), culture);
+                if (list != null)
+                {
+                    return list.FirstOrDefault(x => x.Id == itemId)?.Code;
+                }
+            }
+            return null;
+        }
     }
 }

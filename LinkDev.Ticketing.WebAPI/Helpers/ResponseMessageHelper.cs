@@ -50,6 +50,15 @@ namespace LinkDev.Ticketing.API.Helpers
             return new JsonResult(response) { StatusCode = response.Status };
         }
 
+        public static JsonResult GetResult<T>(ResponseMessage<T> response)
+        {
+            if (response.Status == 0)
+            {
+                response.Status = (int)HttpStatusCode.OK;
+            }
+            return new JsonResult(response) { StatusCode = response.Status };
+        }
+
         public static JsonResult Ok<T>(T data, IEnumerable<string> notifications = null)
         {
             ResponseMessage<T> response = new ResponseMessage<T>((int)HttpStatusCode.OK)
