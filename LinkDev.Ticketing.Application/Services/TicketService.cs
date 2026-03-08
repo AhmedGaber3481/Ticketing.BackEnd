@@ -130,7 +130,13 @@ namespace LinkDev.Ticketing.Application.Services
         {
             if(destination == null)
             {
-               destination = new Ticket() { Title = string.Empty };
+                destination = new Ticket() { Title = string.Empty };
+                destination.CreatedBy = source.UserId;
+            }
+            else
+            {
+                destination.ModifiedBy = source.UserId;
+                destination.LastModifiedAt = DateTime.Now;
             }
             destination.Title = source.Title ?? string.Empty;
             destination.Description = source.Description;

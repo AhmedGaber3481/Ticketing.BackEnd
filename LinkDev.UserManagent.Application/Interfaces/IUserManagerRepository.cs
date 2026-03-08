@@ -11,5 +11,6 @@ namespace LinkDev.UserManagent.Application.Interfaces
         Task<ResponseMessage<LoginResultDTO>> SignIn(User loggedUser);
 
         Task<ResponseMessage<LoggedUserDTO>> GetUserDetails(string userName);
+        Task<string> GetLoggedUserId();
     }
 }

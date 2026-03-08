@@ -18,7 +18,7 @@ namespace LinkDev.Ticketing.Infrastructure.Repositories
         public IEnumerable<TicketView> GetTickets(TicketRequestDTO requestDTO, out int totalCount)
         {
             StringBuilder query = new StringBuilder();
-            StringBuilder getCountQuery = new StringBuilder();
+            //StringBuilder getCountQuery = new StringBuilder();
             StringBuilder filter = new StringBuilder(" WHERE 1=1");
 
             List<SqlParameter> sqlParameters = new List<SqlParameter>(){
@@ -63,7 +63,7 @@ namespace LinkDev.Ticketing.Infrastructure.Repositories
                 queryFilter = queryFilter.Replace("1=1 AND", "");
             }
 
-            if (!new string[] { "Id", "Title", "CreatedAt", "LastModifiedAt" }.Contains(requestDTO.SortBy))
+            if (!new string[] { "Id", "Title", "CreatedAt" }.Contains(requestDTO.SortBy))
             {
                 requestDTO.SortBy = "Ticket.[Id]";
             }
@@ -73,13 +73,19 @@ namespace LinkDev.Ticketing.Infrastructure.Repositories
                 requestDTO.SortDirection = "asc";
             }
 
-            getCountQuery.Append(@"
-            SELECT count(*) [Value]
+            string getCountQuery = @$"SELECT count(*) [Value]
             FROM Ticket
             INNER JOIN TicketStatusLookup 
                 ON TicketStatusLookup.Id = [Ticket].Status 
-                AND TicketStatusLookup.LangId = @Lang")
-            .Append(filter.ToString());
+                AND TicketStatusLookup.LangId = @Lang {filter}";
+
+            //getCountQuery.Append(@"
+            //SELECT count(*) [Value]
+            //FROM Ticket
+            //INNER JOIN TicketStatusLookup 
+            //    ON TicketStatusLookup.Id = [Ticket].Status 
+            //    AND TicketStatusLookup.LangId = @Lang")
+            //.Append(filter.ToString());
 
             query.AppendFormat(@"
             SELECT Ticket.[Id],
@@ -112,7 +118,7 @@ namespace LinkDev.Ticketing.Infrastructure.Repositories
             FETCH NEXT @PageSize ROWS ONLY", queryFilter, requestDTO.SortBy, requestDTO.SortDirection);
 
             totalCount = _dBContext.Set<ScalarInt>()
-            .FromSqlRaw(getCountQuery.ToString(), sqlParameters.ToArray())
+            .FromSqlRaw(getCountQuery, sqlParameters.ToArray())
             .Select(x => x.Value)
             .First();
 

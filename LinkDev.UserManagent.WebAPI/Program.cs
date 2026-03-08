@@ -10,14 +10,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-var loggingSection = builder.Configuration.GetSection("CustomLogging");
-if (loggingSection != null)
-{
-    Serilog.ILogger logger = new LoggerBuilder().Initialize(loggingSection).ConfigureLoggingSink(loggingSection).CreateLogger();
-    builder.Logging.AddSerilog(logger, true);
-    builder.Services.AddSingleton<LinkDev.Ticketing.Logging.Application.Interfaces.ILogger, Logger>();
-}
-
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
@@ -62,6 +54,14 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.HttpOnly = true;
     options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
 });
+
+var loggingSection = builder.Configuration.GetSection("CustomLogging");
+if (loggingSection != null)
+{
+    Serilog.ILogger logger = new LoggerBuilder().Initialize(loggingSection).ConfigureLoggingSink(loggingSection).CreateLogger();
+    builder.Logging.AddSerilog(logger, true);
+    builder.Services.AddSingleton<LinkDev.Ticketing.Logging.Application.Interfaces.ILogger, Logger>();
+}
 
 var CrossOrigin = builder.Configuration["CorsOrigin"];
 

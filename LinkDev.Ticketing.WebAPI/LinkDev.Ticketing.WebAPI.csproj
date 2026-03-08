@@ -14,6 +14,7 @@
     <ProjectReference Include="..\LinkDev.Ticketing.Logging.Application\LinkDev.Ticketing.Logging.Application.csproj" />
     <ProjectReference Include="..\LinkDev.Ticketing.Logging.Infra\LinkDev.Ticketing.Logging.Infra.csproj" />
     <ProjectReference Include="..\LinkDev.Ticketing.Resources\LinkDev.Ticketing.Resources.csproj" />
+    <ProjectReference Include="..\LinkDev.UserManagent.Infrastructure\LinkDev.UserManagent.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

@@ -42,5 +42,6 @@ namespace LinkDev.Ticketing.Application.DTos
         //[AllowedExtensions([".jpg", ".jepg", ".png", ".pdf"], ErrorMessageResourceName = "InvalidFileExtension")]
         //[MaxFileSizeExtention(15, ErrorMessageResourceName = "MaxFileSizeError")]
         public IFormFile[]? Files { get; set; }
+        public string? UserId { get; set; }
     }
 }

@@ -17,14 +17,17 @@ namespace LinkDev.UserManagent.Infrastructure.Repositories
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ApplicationDbContext _applicationDbContext;
+        private readonly IHttpContextAccessor _contextAccessor;
 
         public UserManagerRepository(UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            ApplicationDbContext applicationDbContext)
+            ApplicationDbContext applicationDbContext,
+            IHttpContextAccessor contextAccessor)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _applicationDbContext = applicationDbContext;
+            _contextAccessor = contextAccessor;
         }
 
         public async Task<ResponseMessage<LoggedUserDTO>> GetUserDetails(string userName)
@@ -82,6 +85,19 @@ namespace LinkDev.UserManagent.Infrastructure.Repositories
                 }
             }
             return response;
+        }
+
+        public async Task<string> GetLoggedUserId()
+        {
+            string userId = string.Empty;
+            var identityUser = _contextAccessor.HttpContext?.User?.Identity;
+            if (identityUser != null && identityUser.IsAuthenticated)
+            {
+                IdentityUser? user = await _userManager.FindByNameAsync(identityUser.Name!);
+                userId = user?.Id ?? string.Empty;
+            }
+
+            return userId;
         }
     }
 }

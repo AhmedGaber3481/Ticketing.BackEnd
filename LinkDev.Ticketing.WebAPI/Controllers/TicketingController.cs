@@ -2,6 +2,7 @@
 using LinkDev.Ticketing.Application.IServices;
 using LinkDev.Ticketing.Core.Helpers;
 using LinkDev.Ticketing.Core.Models;
+using LinkDev.UserManagent.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LinkDev.Ticketing.API.Controllers
@@ -13,12 +14,16 @@ namespace LinkDev.Ticketing.API.Controllers
         private readonly Logging.Application.Interfaces.ILogger _logger;
         private readonly ITicketService _ticketService;
         private readonly string? _currentCulture;
+        //private readonly ILoggedUserService _loggedUserService;
 
-        public TicketingController(Logging.Application.Interfaces.ILogger logger, ITicketService ticketService, CultureHelper cultureHelper)
+        public TicketingController(Logging.Application.Interfaces.ILogger logger,
+            ITicketService ticketService,
+            CultureHelper cultureHelper)
         {
             _logger = logger;
             _ticketService = ticketService;
             _currentCulture = cultureHelper.Culture;
+            //_loggedUserService = loggedUserService;
         }
         
         [HttpGet]
@@ -44,7 +49,7 @@ namespace LinkDev.Ticketing.API.Controllers
         
         [HttpPost]
         [Route("SaveTicket")]
-        public  ActionResult SaveTicket([FromForm] Application.DTos.TicketDTO ticketDTO)
+        public  async Task<ActionResult> SaveTicket([FromForm] Application.DTos.TicketDTO ticketDTO)
         {
             Guid correlationId = Guid.NewGuid();
             try
@@ -53,6 +58,9 @@ namespace LinkDev.Ticketing.API.Controllers
                     return ResponseMessageHelper.BadRequest(ResponseErrorMessage.GetErrorMessages(ModelState));
 
                 _logger.LogInformation(ticketDTO, "TicketingController", "AddTicket", correlationId);
+
+                //ticketDTO.UserId = await _loggedUserService.GetLoggedUserId();
+
                 var response = _ticketService.SaveTicket(ticketDTO, _currentCulture!, correlationId);
 
                 return ResponseMessageHelper.GetResult(response);
