@@ -363,3 +363,4 @@ FodyWeavers.xsd
 !GAFIDigitalSignature/GAFIDigitalSignature/PdfViewerCustom/bin
 !GAFIDigitalSignature/GAFIDigitalSignature/PdfViewerCustom/bin/Debug
 /LinkDev.Ticketing.WebAPI/Attachments/
+/LinkDev.Ticketing.WebAPI/wwwroot/Attachments/202603/0
