@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\LinkDev.Ticketing.Application\LinkDev.Ticketing.Application.csproj" />
     <ProjectReference Include="..\LinkDev.Ticketing.Core\LinkDev.Ticketing.Core.csproj" />
+    <ProjectReference Include="..\LinkDev.UserManagent.Application\LinkDev.UserManagent.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>

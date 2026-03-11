@@ -2,6 +2,8 @@
 using LinkDev.Ticketing.Core.Models;
 using LinkDev.Ticketing.Domain.Entities;
 using LinkDev.Ticketing.Infrastructure.Data;
+using LinkDev.UserManagent.Application.Interfaces;
+using LinkDev.UserManagent.Domain.Models;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
@@ -11,19 +13,26 @@ namespace LinkDev.Ticketing.Infrastructure.Repositories
 {
     public class TicketRepository : Repository<Ticket>, ITicketRepository
     {
-        public TicketRepository(TicketingContext dbContext) : base(dbContext)
+        private readonly IUserManager _userManager;
+        public TicketRepository(TicketingContext dbContext, IUserManager userManager) : base(dbContext)
         {
+            _userManager = userManager;
         }
 
-        public IEnumerable<TicketView> GetTickets(TicketRequestDTO requestDTO, out int totalCount)
+        public IEnumerable<TicketView> GetTickets(TicketRequestDTO requestDTO, string userId, Guid correlationId, out int totalCount)
         {
             StringBuilder query = new StringBuilder();
-            //StringBuilder getCountQuery = new StringBuilder();
             StringBuilder filter = new StringBuilder(" WHERE 1=1");
 
             List<SqlParameter> sqlParameters = new List<SqlParameter>(){
                 new SqlParameter("@Lang", requestDTO.Culture?.ToLower() == "en-us" ? (short)1 : (short)2)
             };
+
+            if (_userManager.IsInRole(UserRoles.Client))
+            {
+                filter.Append(" AND CreatedBy = @UserId");
+                sqlParameters.Add(new SqlParameter("@UserId", userId));
+            }
 
             if (!string.IsNullOrWhiteSpace(requestDTO.SearchValue))
             {
@@ -78,14 +87,6 @@ namespace LinkDev.Ticketing.Infrastructure.Repositories
             INNER JOIN TicketStatusLookup 
                 ON TicketStatusLookup.Id = [Ticket].Status 
                 AND TicketStatusLookup.LangId = @Lang {filter}";
-
-            //getCountQuery.Append(@"
-            //SELECT count(*) [Value]
-            //FROM Ticket
-            //INNER JOIN TicketStatusLookup 
-            //    ON TicketStatusLookup.Id = [Ticket].Status 
-            //    AND TicketStatusLookup.LangId = @Lang")
-            //.Append(filter.ToString());
 
             query.AppendFormat(@"
             SELECT Ticket.[Id],

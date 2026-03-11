@@ -2,6 +2,7 @@ using LinkDev.Ticketing.Logging.Infra;
 using LinkDev.UserManagent.Application.Interfaces;
 using LinkDev.UserManagent.Infrastructure.Data;
 using LinkDev.UserManagent.Infrastructure.Repositories;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -45,15 +46,26 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.User.RequireUniqueEmail = false;
 });
 
+#region Cookies Configuration
 // Authentication Cookie Name ".AspNetCore.Identity.Application"
+
+string? PresistIdentityKeysPath = builder.Configuration["Security:PresistIdentityKeysPath"];
+if (PresistIdentityKeysPath != null)
+{
+    builder.Services.AddDataProtection()
+            .PersistKeysToFileSystem(new DirectoryInfo(PresistIdentityKeysPath))
+            .SetApplicationName("SharedIdentityCookie");
+}
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
+    options.Cookie.Name = ".AspNetCore.Identity.Application";
     options.Cookie.SameSite = SameSiteMode.None;   // IMPORTANT
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // REQUIRED
     options.Cookie.HttpOnly = true;
     options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
 });
+#endregion
 
 var loggingSection = builder.Configuration.GetSection("CustomLogging");
 if (loggingSection != null)

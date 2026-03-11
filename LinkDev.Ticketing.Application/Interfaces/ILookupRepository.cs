@@ -6,7 +6,7 @@ namespace LinkDev.Ticketing.Application.Interfaces
 {
     public interface ILookupRepository
     {
-        List<LookupDTO>? GetLookup<T>(string lookupType, string culture) where T : BaseLookup;
+        List<LookupDTO>? GetLookup<T>(LookupType lookupType, string culture) where T : BaseLookup;
         int? GetLookupItemId<T>(LookupType lookupType, string itemCode, string culture) where T : BaseLookup;
         string? GetLookupItemCode<T>(LookupType lookupType, int? itemId, string culture) where T : BaseLookup;
     }

@@ -7,8 +7,8 @@ namespace LinkDev.UserManagent.Application.Services
 {
     public class LoggedUserService : ILoggedUserService
     {
-        private readonly ILoggedUserRepository _loggedUserRepository;
-        public LoggedUserService(ILoggedUserRepository loggedUserRepository)
+        private readonly IUserManager _loggedUserRepository;
+        public LoggedUserService(IUserManager loggedUserRepository)
         {
             _loggedUserRepository = loggedUserRepository;
         }

@@ -29,6 +29,8 @@ namespace LinkDev.Ticketing.Domain.Entities
         public TicketType? TicketType { get; set; }
 
         //public ICollection<TicketTransaction>? TicketTransactions { get; set; }
+
+        public ICollection<TicketAttachment>? TicketAttachments { get; set; }
     }
 
 }

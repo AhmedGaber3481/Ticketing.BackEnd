@@ -31,5 +31,7 @@ namespace LinkDev.Ticketing.Application.Interfaces
         IQueryable<T> AsQuerable();
 
         Task<IEnumerable<T>> GetAllAsync();
+
+        void DeleteRange(T[] items);
     }
 }

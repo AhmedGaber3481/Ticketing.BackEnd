@@ -40,6 +40,7 @@ namespace LinkDev.Ticketing.Infrastructure.Data
             modelBuilder.Entity<TicketTransaction>().HasOne(e => e.TicketTransactionStatus).WithMany().HasForeignKey(e => e.StatusId);
             modelBuilder.Entity<TicketTransaction>().HasOne(e => e.TicketTransactionType).WithMany().HasForeignKey(e => e.TypeId);
 
+            modelBuilder.Entity<TicketAttachment>().HasOne(e => e.Ticket).WithMany(e=> e.TicketAttachments).HasForeignKey(e => e.TicketId);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

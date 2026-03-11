@@ -107,5 +107,10 @@ namespace LinkDev.Ticketing.Infrastructure.Repositories
         {
             return await dbSet.ToListAsync();
         }
+
+        public void DeleteRange(T[] items)
+        {
+            dbSet.RemoveRange(items);
+        }
     }
 }

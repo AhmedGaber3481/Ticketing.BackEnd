@@ -1,41 +1,47 @@
 ﻿using LinkDev.Ticketing.API.Helpers;
+using LinkDev.Ticketing.Application.DTos;
 using LinkDev.Ticketing.Application.IServices;
 using LinkDev.Ticketing.Core.Helpers;
 using LinkDev.Ticketing.Core.Models;
 using LinkDev.UserManagent.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LinkDev.Ticketing.API.Controllers
 {
     [Route("api/Ticketing")]
     [ApiController]
+    [Authorize]
     public class TicketingController : ControllerBase
     {
         private readonly Logging.Application.Interfaces.ILogger _logger;
         private readonly ITicketService _ticketService;
         private readonly string? _currentCulture;
-        //private readonly ILoggedUserService _loggedUserService;
+        private readonly ILoggedUserService _loggedUserService;
 
         public TicketingController(Logging.Application.Interfaces.ILogger logger,
             ITicketService ticketService,
-            CultureHelper cultureHelper)
+            CultureHelper cultureHelper,
+            ILoggedUserService loggedUserService)
         {
             _logger = logger;
             _ticketService = ticketService;
             _currentCulture = cultureHelper.Culture;
-            //_loggedUserService = loggedUserService;
+            _loggedUserService = loggedUserService;
         }
         
         [HttpGet]
         [Route("GetTickets")]
-        public ActionResult GetTickets([FromQuery]TicketRequestDTO requestDTO)
+        public async Task<ActionResult> GetTickets([FromQuery]TicketRequestDTO requestDTO)
         {
             Guid correlationId = Guid.NewGuid();
             try
             {
                 _logger.LogInformation("Get Tickets Page:" + requestDTO.PageNumber, "TicketingController", "GetTickets", correlationId);
                 requestDTO.Culture = _currentCulture;
-                var tickets = _ticketService.GetTickets(requestDTO);
+
+                string userId = await _loggedUserService.GetLoggedUserId();
+                var tickets = _ticketService.GetTickets(requestDTO, correlationId, userId);
                 
                 return ResponseMessageHelper.Ok(tickets);
             }
@@ -59,7 +65,7 @@ namespace LinkDev.Ticketing.API.Controllers
 
                 _logger.LogInformation(ticketDTO, "TicketingController", "AddTicket", correlationId);
 
-                //ticketDTO.UserId = await _loggedUserService.GetLoggedUserId();
+                ticketDTO.UserId = await _loggedUserService.GetLoggedUserId();
 
                 var response = _ticketService.SaveTicket(ticketDTO, _currentCulture!, correlationId);
 

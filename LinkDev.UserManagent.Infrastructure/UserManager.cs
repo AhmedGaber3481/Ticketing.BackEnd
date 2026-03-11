@@ -8,12 +8,12 @@ using System.Text;
 
 namespace LinkDev.UserManagent.Infrastructure.Repositories
 {
-    public class LoggedUserRepository : ILoggedUserRepository
+    public class UserManager : IUserManager
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IHttpContextAccessor _contextAccessor;
 
-        public LoggedUserRepository(UserManager<IdentityUser> userManager,
+        public UserManager(UserManager<IdentityUser> userManager,
             IHttpContextAccessor contextAccessor)
         {
             _contextAccessor = contextAccessor;
@@ -30,6 +30,12 @@ namespace LinkDev.UserManagent.Infrastructure.Repositories
             }
 
             return userId;
+        }
+
+        public bool IsInRole(string roleName)
+        {
+            var user = _contextAccessor.HttpContext?.User;
+            return user != null && user.IsInRole(roleName);
         }
     }
 }

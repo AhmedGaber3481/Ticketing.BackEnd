@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using LinkDev.Ticketing.Application.Dtos;
 using LinkDev.Ticketing.Resources;
 using LinkDev.Ticketing.Resources.Common;
 using Microsoft.AspNetCore.Http;
@@ -43,5 +44,7 @@ namespace LinkDev.Ticketing.Application.DTos
         //[MaxFileSizeExtention(15, ErrorMessageResourceName = "MaxFileSizeError")]
         public IFormFile[]? Files { get; set; }
         public string? UserId { get; set; }
+        public TicketAttachmentDTO[]? Attachments { get; set; }
+        public string[]? AttachmentSerials { get; set; }
     }
 }

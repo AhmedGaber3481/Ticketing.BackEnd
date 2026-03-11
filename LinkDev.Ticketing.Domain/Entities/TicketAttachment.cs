@@ -11,5 +11,6 @@ namespace LinkDev.Ticketing.Domain.Entities
         public string? AttachmentName { get; set; }
         [MaxLength(256)]
         public string? AttachmentUrl { get; set; }
+        public Ticket? Ticket { get; set; }
     }
 }

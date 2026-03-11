@@ -38,11 +38,11 @@ namespace LinkDev.Ticketing.Application.Services
             _lookupRepository = lookupRepository;
         }
 
-        public TicketSearchResult<TicketView> GetTickets(TicketRequestDTO requestDTO)
+        public TicketSearchResult<TicketView> GetTickets(TicketRequestDTO requestDTO, Guid correlationId, string userId)
         {
-            _logger.LogInformation("GetTickets", "TicketService", "GetTickets", Guid.NewGuid());
+            _logger.LogInformation("GetTickets", "TicketService", "GetTickets", correlationId);
             
-            var tickets = _ticketRepository.GetTickets(requestDTO, out int totalCount);
+            var tickets = _ticketRepository.GetTickets(requestDTO, userId, correlationId, out int totalCount);
 
             return new TicketSearchResult<TicketView>
             {
@@ -62,7 +62,7 @@ namespace LinkDev.Ticketing.Application.Services
                 _logger.LogInformation("Save Ticket before validate: " + ticketDTO.Title, "TicketingService", "AddTicket", correlationId);
 
                 transaction = _unitOfWork.BeginTransaction();
-                Ticket? ticket = _ticketRepository.GetById(ticketDTO.Id);
+                Ticket? ticket = _ticketRepository.FirstOrDefault(x => x.Id == ticketDTO.Id, x => x.TicketAttachments!);
                 if (ticket != null)
                 {
                     MapTicket(ticketDTO, ref ticket, culture);
@@ -77,7 +77,7 @@ namespace LinkDev.Ticketing.Application.Services
 
                 _unitOfWork.SaveChanges();
 
-                SaveAttachments(ticketDTO.Files, ticket.Id);
+                SaveAttachments(ticketDTO.Files, ticket.Id, ticket, ticketDTO.AttachmentSerials);
 
                 _unitOfWork.SaveChanges();
                 transaction.Commit();
@@ -109,7 +109,7 @@ namespace LinkDev.Ticketing.Application.Services
         {
             try
             {
-                var ticket = _ticketRepository.GetById(ticketId);
+                var ticket = _ticketRepository.FirstOrDefault(x=> x.Id == ticketId, x => x.TicketAttachments!);
                 if(ticket == null)
                 {
                     return new ResponseMessage<TicketDTO>() { Status = (int)HttpStatusCode.NotFound};
@@ -183,16 +183,52 @@ namespace LinkDev.Ticketing.Application.Services
             {
                 ticketDTO.Status = _lookupRepository.GetLookupItemCode<TicketStatusLookup>(LookupType.TicketStatus, ticket.Status, culture);
             }
+            if (ticket.TicketAttachments != null)
+            {
+                ticketDTO.Attachments = ticket.TicketAttachments.Select(x => new TicketAttachmentDTO()
+                {
+                    AttachmentId = x.Id,
+                    AttachmentName = x.AttachmentName,
+                    AttachmentUrl = x.AttachmentUrl
+                }).ToArray();
+            }
 
             return ticketDTO;
         }
-        //private Ticket MapTicket(TicketDTO source, string culture)
-        //{
-        //    return MapTicket(source, null, culture);
-        //}
-
-        private void SaveAttachments(IFormFile[]? attachments, int ticketId)
+        
+        private void SaveAttachments(IFormFile[]? attachments, int ticketId, Ticket ticket, string[]? AttachmentSerials)
         {
+            //delete old attachmnts
+            if (ticket != null && ticket.TicketAttachments != null)
+            {
+                List<TicketAttachment> deletedAttachments = new List<TicketAttachment>();
+                if (AttachmentSerials != null && AttachmentSerials.Length > 0)
+                {
+                    // iterate on ticket attachments in database
+                    foreach (var item in ticket.TicketAttachments)
+                    {
+                        if (!AttachmentSerials.Contains(item.Id.ToString()))
+                        {
+                            //delete attachment that exist in database but not in given list of ticket attachments
+                            deletedAttachments.Add(item);
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var item in ticket.TicketAttachments)
+                    {
+                        //delete attachment
+                        deletedAttachments.Add(item);
+                    }
+                }
+
+                if (deletedAttachments.Count > 0)
+                {
+                    _attachmentRepository.DeleteRange(deletedAttachments.ToArray());
+                }
+            }
+
             if (attachments != null && attachments.Length > 0)
             {
                 foreach (var attachment in attachments)

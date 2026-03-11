@@ -17,21 +17,22 @@ namespace LinkDev.Ticketing.Application.Services
         {
             if (Enum.TryParse(lookupType, true, out LookupType _lookupType))
             {
-                switch (_lookupType)
-                {
-                    case LookupType.TicketType:
-                        return _lookupRepository.GetLookup<TicketTypeLookup>(lookupType, culture);
-                    case LookupType.TicketCategory:
-                        return _lookupRepository.GetLookup<TicketCategoryLookup>(lookupType, culture);
-                    //case LookupType.TicketSubCategory:
-                    //    return _lookupRepository.GetLookup<TicketSubCategory>(lookupType, culture);
-                    case LookupType.TicketPriority:
-                        return _lookupRepository.GetLookup<TicketPriorityLookup>(lookupType, culture);
-                    case LookupType.TicketStatus:
-                        return _lookupRepository.GetLookup<TicketStatusLookup>(lookupType, culture);
-                    default:
-                        throw new ArgumentException("Invalid lookup type");
-                }
+                //switch (_lookupType)
+                //{
+                //    case LookupType.TicketType:
+                //        return _lookupRepository.GetLookup<TicketTypeLookup>(lookupType, culture);
+                //    case LookupType.TicketCategory:
+                //        return _lookupRepository.GetLookup<TicketCategoryLookup>(lookupType, culture);
+                //    //case LookupType.TicketSubCategory:
+                //    //    return _lookupRepository.GetLookup<TicketSubCategory>(lookupType, culture);
+                //    case LookupType.TicketPriority:
+                //        return _lookupRepository.GetLookup<TicketPriorityLookup>(lookupType, culture);
+                //    case LookupType.TicketStatus:
+                //        return _lookupRepository.GetLookup<TicketStatusLookup>(lookupType, culture);
+                //    default:
+                //        throw new ArgumentException("Invalid lookup type");
+                //}
+                return _lookupRepository.GetLookup<BaseLookup>(_lookupType, culture);
             }
             else
             {

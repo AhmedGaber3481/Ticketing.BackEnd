@@ -7,11 +7,12 @@ using LinkDev.Ticketing.Infrastructure.Helpers;
 using LinkDev.Ticketing.Infrastructure.Repositories;
 using LinkDev.Ticketing.Infrastructure.Uow;
 using LinkDev.Ticketing.Logging.Infra;
-//using LinkDev.UserManagent.Application.Interfaces;
-//using LinkDev.UserManagent.Application.Services;
-//using LinkDev.UserManagent.Infrastructure.Data;
-//using LinkDev.UserManagent.Infrastructure.Repositories;
-//using Microsoft.AspNetCore.Identity;
+using LinkDev.UserManagent.Application.Interfaces;
+using LinkDev.UserManagent.Application.Services;
+using LinkDev.UserManagent.Infrastructure.Data;
+using LinkDev.UserManagent.Infrastructure.Repositories;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -27,9 +28,13 @@ internal class Program
 
         builder.Services.AddDbContext<TicketingContext>(options => options.UseSqlServer(connectionString));
 
-        //builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
-        //builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-        //    .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+        builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+
+        builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
+
+        builder.Services.AddAuthorization();
 
         builder.Services.AddMemoryCache();
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -44,16 +49,16 @@ internal class Program
         builder.Services.AddScoped<ILookupService, LookupService>();
         builder.Services.AddSingleton<DBHelper>();
 
-        //builder.Services.ConfigureApplicationCookie(options =>
-        //{
-        //    options.Cookie.SameSite = SameSiteMode.None;   // IMPORTANT
-        //    options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // REQUIRED
-        //    options.Cookie.HttpOnly = true;
-        //    options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
-        //});
+        string? PresistIdentityKeysPath = builder.Configuration["Security:PresistIdentityKeysPath"];
+        if (PresistIdentityKeysPath != null)
+        {
+            builder.Services.AddDataProtection()
+                    .PersistKeysToFileSystem(new DirectoryInfo(PresistIdentityKeysPath))
+                    .SetApplicationName("SharedIdentityCookie");
+        }
 
-        //builder.Services.AddScoped<ILoggedUserRepository,LoggedUserRepository>();
-        //builder.Services.AddScoped<ILoggedUserService, LoggedUserService>();
+        builder.Services.AddScoped<IUserManager, UserManager>();
+        builder.Services.AddScoped<ILoggedUserService, LoggedUserService>();
 
         var loggingSection = builder.Configuration.GetSection("CustomLogging");
         if (loggingSection != null)
@@ -91,6 +96,7 @@ internal class Program
 
         app.UseRouting();
 
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();
