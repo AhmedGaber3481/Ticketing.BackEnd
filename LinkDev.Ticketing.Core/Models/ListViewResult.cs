@@ -1,6 +1,10 @@
-﻿namespace LinkDev.Ticketing.Application.Dtos
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace LinkDev.Ticketing.Core.Models
 {
-    public class TicketSearchResult<T> where T : class
+    public class ListViewResult<T> where T : class
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }

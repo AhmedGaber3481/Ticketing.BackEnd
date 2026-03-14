@@ -38,13 +38,13 @@ namespace LinkDev.Ticketing.Application.Services
             _lookupRepository = lookupRepository;
         }
 
-        public TicketSearchResult<TicketView> GetTickets(TicketRequestDTO requestDTO, Guid correlationId, string userId)
+        public ListViewResult<TicketView> GetTickets(TicketRequestDTO requestDTO, Guid correlationId, string userId)
         {
             _logger.LogInformation("GetTickets", "TicketService", "GetTickets", correlationId);
             
             var tickets = _ticketRepository.GetTickets(requestDTO, userId, correlationId, out int totalCount);
 
-            return new TicketSearchResult<TicketView>
+            return new ListViewResult<TicketView>
             {
                 PageNumber = requestDTO.PageNumber,
                 PageSize = requestDTO.PageSize,

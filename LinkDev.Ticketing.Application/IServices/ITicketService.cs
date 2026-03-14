@@ -7,7 +7,7 @@ namespace LinkDev.Ticketing.Application.IServices
 {
     public interface ITicketService
     {
-        TicketSearchResult<TicketView> GetTickets(TicketRequestDTO requestDTO, Guid correlationId, string userId);
+        ListViewResult<TicketView> GetTickets(TicketRequestDTO requestDTO, Guid correlationId, string userId);
         ResponseMessage<bool> SaveTicket(TicketDTO ticketDTO, string culture, Guid correlationId);
         ResponseMessage<TicketDTO> GetTicket(int ticketId, string culture, Guid correlationId);
     }

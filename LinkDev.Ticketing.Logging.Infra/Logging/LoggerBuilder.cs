@@ -100,6 +100,7 @@ namespace LinkDev.Ticketing.Logging.Infra
             };
 
             loggerConfiguration = loggerConfiguration
+                .Enrich.FromLogContext()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .MinimumLevel.Override("System", LogEventLevel.Warning)
                 .WriteTo
