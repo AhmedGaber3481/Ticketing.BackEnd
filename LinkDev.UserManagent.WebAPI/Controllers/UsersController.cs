@@ -1,5 +1,4 @@
-﻿using LinkDev.Ticketing.Core.Models;
-using LinkDev.UserManagent.Application.Interfaces;
+﻿using LinkDev.UserManagent.Application.Interfaces;
 using LinkDev.UserManagent.Domain.DTOs;
 using LinkDev.UserManagent.WebAPI.Helpers;
 using Microsoft.AspNetCore.Mvc;
@@ -28,29 +27,6 @@ namespace LinkDev.UserManagent.WebAPI.Controllers
 
             try
             {
-                //var users = new ListViewResult<UserListDTO>();
-                //users.Items = new List<UserListDTO>()
-                //{
-                //    new UserListDTO()
-                //    {
-                //        UserName="Admin",
-                //        UserFullName = "Adminstrator",
-                //        Email ="test@yahoo.com",
-                //        PhoneNumber ="1223445",
-                //        UserId = Guid.NewGuid().ToString(),
-                //        UserRole ="Admin"
-                //    },
-                //    new UserListDTO()
-                //    {
-                //        UserName="Ahmed",
-                //        UserFullName = "Adminstrator2",
-                //        Email ="test2@yahoo.com",
-                //        PhoneNumber ="1223446",
-                //        UserId = Guid.NewGuid().ToString(),
-                //        UserRole ="Admin"
-                //    }
-                //};
-
                 var users = _userManager.GetUsersList(requestDTO, correlationId);
 
                 if(users == null)
@@ -63,6 +39,32 @@ namespace LinkDev.UserManagent.WebAPI.Controllers
             catch (Exception exp)
             {
                 _logger.LogError(exp, "Exception in GetUsers", "UsersController", "GetUsers", correlationId);
+
+                return ResponseMessageHelper.ServerError(correlationId);
+            }
+        }
+
+        [Route("GetUser/{id}"), HttpGet]
+        public async Task<IActionResult> GetUsers(string id)
+        {
+            Guid correlationId = Guid.NewGuid();
+
+            _logger.LogInformation("GetUser Id", "UsersController", "GetUser", correlationId, id1: id);
+
+            try
+            {
+                var users = _userManager.GetUserById(id, correlationId);
+
+                if (users == null)
+                {
+                    return ResponseMessageHelper.ServerError(correlationId);
+                }
+
+                return ResponseMessageHelper.Ok(users);
+            }
+            catch (Exception exp)
+            {
+                _logger.LogError(exp, "Exception in GetUser", "UsersController", "GetUser", correlationId);
 
                 return ResponseMessageHelper.ServerError(correlationId);
             }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LinkDev.UserManagent.Domain.Entities
+﻿namespace LinkDev.UserManagent.Infrastructure.Entities
 {
     public class UserDetails
     {

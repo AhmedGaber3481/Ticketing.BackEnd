@@ -4,6 +4,7 @@ using LinkDev.UserManagent.Domain.DTOs;
 using LinkDev.UserManagent.Infrastructure.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace LinkDev.UserManagent.Infrastructure.Repositories
 {
@@ -37,11 +38,11 @@ namespace LinkDev.UserManagent.Infrastructure.Repositories
             return userId;
         }
 
-        public ListViewResult<UserListDTO>? GetUsersList(UserSearchDTO requestDTO, Guid correlationId)
+        public ListViewResult<UserDTO>? GetUsersList(UserSearchDTO requestDTO, Guid correlationId)
         {
             try
             {
-                ListViewResult<UserListDTO> listViewResult = new ListViewResult<UserListDTO>();
+                ListViewResult<UserDTO> listViewResult = new ListViewResult<UserDTO>();
 
                 if (requestDTO.PageNumber < 1)
                 {
@@ -80,7 +81,7 @@ namespace LinkDev.UserManagent.Infrastructure.Repositories
                 listViewResult.TotalCount = queryCount.Count();
 
 
-                listViewResult.Items = query.Select(x => new UserListDTO()
+                listViewResult.Items = query.Select(x => new UserDTO()
                 {
                     Email = x.user.Email,
                     PhoneNumber = x.user.PhoneNumber,
@@ -97,7 +98,44 @@ namespace LinkDev.UserManagent.Infrastructure.Repositories
             catch (Exception exp)
             {
                 _logger.LogError(exp, "Exception in GetUsersList", "UserManager", "GetUsersList", correlationId);
+                return null;
+            }
+        }
 
+        public UserDTO? GetUserById(string userId, Guid correlationId)
+        {
+            try
+            {
+                var user = _applicationDbContext.Users.Include(e=> e.UserDetails).FirstOrDefault(x => x.Id == userId);
+
+                if (user == null)
+                {
+                    return null;
+                }
+
+                UserDTO userDTO = new UserDTO();
+
+                var _role = (from userRole in _applicationDbContext.UserRoles
+                                     join role in _applicationDbContext.Roles
+                                     on userRole.RoleId equals role.Id
+                                     where userRole.UserId == userId
+                                     select role).FirstOrDefault();
+                userDTO.UserId = userId;
+                userDTO.Email = user.Email;
+                userDTO.PhoneNumber = user.PhoneNumber;
+                userDTO.UserName = user.UserName;
+                userDTO.UserFullName = user.UserDetails?.FullName;
+                if (_role != null) 
+                {
+                   userDTO.RoleId = _role.Id;
+                   userDTO.UserRole = _role.Name;
+                }
+
+                return userDTO;
+            }
+            catch (Exception exp)
+            {
+                _logger.LogError(exp, "Exception in GetUserById", "UserManager", "GetUserById", correlationId);
                 return null;
             }
         }

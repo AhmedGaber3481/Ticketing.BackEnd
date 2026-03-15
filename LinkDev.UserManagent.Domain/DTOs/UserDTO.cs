@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LinkDev.UserManagent.Domain.DTOs
+﻿namespace LinkDev.UserManagent.Domain.DTOs
 {
-    public class UserListDTO
+    public class UserDTO
     {
         public string? UserFullName { get; set; }
         public string? UserId { get; set; }
@@ -12,5 +8,6 @@ namespace LinkDev.UserManagent.Domain.DTOs
         public string? Email { get; set; }
         public string? PhoneNumber { get; set; }
         public string? UserRole { get; set; }
+        public string? RoleId { get; set; }
     }
 }

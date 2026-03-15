@@ -7,6 +7,7 @@ namespace LinkDev.UserManagent.Application.Interfaces
     {
         Task<string> GetLoggedUserId();
         bool IsInRole(string roleName);
-        ListViewResult<UserListDTO>? GetUsersList(UserSearchDTO requestDTO, Guid correlationId);
+        ListViewResult<UserDTO>? GetUsersList(UserSearchDTO requestDTO, Guid correlationId);
+        UserDTO? GetUserById(string userId, Guid correlationId);
     }
 }
