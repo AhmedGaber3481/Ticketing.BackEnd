@@ -60,13 +60,14 @@ internal class Program
         builder.Services.AddScoped<IUserManager, UserManager>();
         builder.Services.AddScoped<ILoggedUserService, LoggedUserService>();
 
-        var loggingSection = builder.Configuration.GetSection("CustomLogging");
-        if (loggingSection != null)
-        {
-            Serilog.ILogger logger = new LoggerBuilder().Initialize(loggingSection).ConfigureLoggingSink(loggingSection).CreateLogger();
-            builder.Logging.AddSerilog(logger, true);
-            builder.Services.AddSingleton<LinkDev.Ticketing.Logging.Application.Interfaces.ILogger, Logger>();
-        }
+        //var loggingSection = builder.Configuration.GetSection("CustomLogging");
+        //if (loggingSection != null)
+        //{
+        //    Serilog.ILogger logger = new LoggerBuilder().Initialize(loggingSection).ConfigureLoggingSink(loggingSection).CreateLogger();
+        //    builder.Logging.AddSerilog(logger, true);
+        //    builder.Services.AddSingleton<LinkDev.Ticketing.Logging.Application.Interfaces.ILogger, Logger>();
+        //}
+        ConfigureLogging(builder);
 
         var CrossOrigin = builder.Configuration["CorsOrigin"];
 
@@ -102,5 +103,17 @@ internal class Program
         app.MapControllers();
 
         app.Run();
+    }
+    private static void ConfigureLogging(WebApplicationBuilder builder)
+    {
+        var loggingSection = builder.Configuration.GetSection("CustomLogging");
+        if (loggingSection != null)
+        {
+            //Serilog.ILogger logger = new LoggerBuilder().Initialize(loggingSection).ConfigureLoggingSink(loggingSection).CreateLogger();
+            //builder.Logging.AddSerilog(logger, true);
+
+            Log.Logger = new LoggerBuilder().Initialize(loggingSection).ConfigureLoggingSink(loggingSection).CreateLogger();
+            builder.Services.AddSingleton<LinkDev.Ticketing.Logging.Application.Interfaces.ILogger, Logger>();
+        }
     }
 }

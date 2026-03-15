@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using LinkDev.Ticketing.Core.Models;
+using LinkDev.UserManagent.Domain.DTOs;
 
 namespace LinkDev.UserManagent.Application.Interfaces
 {
@@ -8,5 +7,6 @@ namespace LinkDev.UserManagent.Application.Interfaces
     {
         Task<string> GetLoggedUserId();
         bool IsInRole(string roleName);
+        ListViewResult<UserListDTO>? GetUsersList(UserSearchDTO requestDTO, Guid correlationId);
     }
 }

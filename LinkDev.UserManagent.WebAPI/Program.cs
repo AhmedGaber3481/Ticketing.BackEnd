@@ -26,7 +26,8 @@ public partial class Program
             .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
         builder.Services.AddScoped<IUserManagerRepository, UserManagerRepository>();
-
+        builder.Services.AddScoped<IUserManager, UserManager>();
+        
         builder.Services.Configure<IdentityOptions>(options =>
         {
             // Password settings.
@@ -124,7 +125,3 @@ public partial class Program
         }
     }
 }
-
-#region Cookies Configuration
-
-#endregion

@@ -8,5 +8,6 @@ namespace LinkDev.UserManagent.Domain.Entities
     {
         public required string UserId { get; set; }
         public string? FullName { get; set; }
+        public required AspNetUsers User { get; set; }
     }
 }

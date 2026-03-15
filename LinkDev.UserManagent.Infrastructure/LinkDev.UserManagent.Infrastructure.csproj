@@ -23,6 +23,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\LinkDev.Ticketing.Logging.Infra\LinkDev.Ticketing.Logging.Infra.csproj" />
 	  <ProjectReference Include="..\LinkDev.UserManagent.Application\LinkDev.UserManagent.Application.csproj" />
 	  <ProjectReference Include="..\LinkDev.UserManagent.Domain\LinkDev.UserManagent.Domain.csproj" />
 	</ItemGroup>
