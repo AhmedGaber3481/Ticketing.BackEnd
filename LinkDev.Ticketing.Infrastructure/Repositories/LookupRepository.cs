@@ -64,5 +64,15 @@ namespace LinkDev.Ticketing.Infrastructure.Repositories
             }
             return null;
         }
+
+        public string? GetLookupItemName<T>(LookupType lookupType, int? itemId, string culture) where T : BaseLookup
+        {
+            var list = GetLookup<T>(lookupType, culture);
+            if (list != null)
+            {
+                return list.FirstOrDefault(x => x.Id == itemId)?.Name;
+            }
+            return null;
+        }
     }
 }

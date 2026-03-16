@@ -254,5 +254,9 @@ namespace LinkDev.Ticketing.Application.Services
             }
         }
 
+        public List<TicketStatisticsDTO>? GetTicketStatistics(string culture, string userId, Guid correlationId)
+        {
+            return _ticketRepository.GetTicketStatistics(culture, userId, correlationId);
+        }
     }
 }

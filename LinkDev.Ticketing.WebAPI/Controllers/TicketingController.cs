@@ -37,10 +37,11 @@ namespace LinkDev.Ticketing.API.Controllers
             Guid correlationId = Guid.NewGuid();
             try
             {
-                _logger.LogInformation("Get Tickets Page:" + requestDTO.PageNumber, "TicketingController", "GetTickets", correlationId);
+                string userId = await _loggedUserService.GetLoggedUserId();
+
+                _logger.LogInformation("Get Tickets Page:" + requestDTO.PageNumber, "TicketingController", "GetTickets", correlationId, id1: userId);
                 requestDTO.Culture = _currentCulture;
 
-                string userId = await _loggedUserService.GetLoggedUserId();
                 var tickets = _ticketService.GetTickets(requestDTO, correlationId, userId);
                 
                 return ResponseMessageHelper.Ok(tickets);
@@ -60,12 +61,12 @@ namespace LinkDev.Ticketing.API.Controllers
             Guid correlationId = Guid.NewGuid();
             try
             {
+                ticketDTO.UserId = await _loggedUserService.GetLoggedUserId();
+
+                _logger.LogInformation(ticketDTO, "TicketingController", "AddTicket", correlationId, id1: ticketDTO.UserId);
+
                 if (!ModelState.IsValid)
                     return ResponseMessageHelper.BadRequest(ResponseErrorMessage.GetErrorMessages(ModelState));
-
-                _logger.LogInformation(ticketDTO, "TicketingController", "AddTicket", correlationId);
-
-                ticketDTO.UserId = await _loggedUserService.GetLoggedUserId();
 
                 var response = _ticketService.SaveTicket(ticketDTO, _currentCulture!, correlationId);
 

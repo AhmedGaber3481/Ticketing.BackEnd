@@ -9,5 +9,6 @@ namespace LinkDev.Ticketing.Application.Interfaces
         List<LookupDTO>? GetLookup<T>(LookupType lookupType, string culture) where T : BaseLookup;
         int? GetLookupItemId<T>(LookupType lookupType, string itemCode, string culture) where T : BaseLookup;
         string? GetLookupItemCode<T>(LookupType lookupType, int? itemId, string culture) where T : BaseLookup;
+        string? GetLookupItemName<T>(LookupType lookupType, int? itemId, string culture) where T : BaseLookup;
     }
 }

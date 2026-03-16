@@ -10,5 +10,6 @@ namespace LinkDev.Ticketing.Application.IServices
         ListViewResult<TicketView> GetTickets(TicketRequestDTO requestDTO, Guid correlationId, string userId);
         ResponseMessage<bool> SaveTicket(TicketDTO ticketDTO, string culture, Guid correlationId);
         ResponseMessage<TicketDTO> GetTicket(int ticketId, string culture, Guid correlationId);
+        List<TicketStatisticsDTO>? GetTicketStatistics(string culture, string userId, Guid correlationId);
     }
 }

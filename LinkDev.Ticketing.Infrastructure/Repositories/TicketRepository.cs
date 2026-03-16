@@ -1,6 +1,8 @@
-﻿using LinkDev.Ticketing.Application.Interfaces;
+﻿using LinkDev.Ticketing.Application.Dtos;
+using LinkDev.Ticketing.Application.Interfaces;
 using LinkDev.Ticketing.Core.Models;
 using LinkDev.Ticketing.Domain.Entities;
+using LinkDev.Ticketing.Domain.Enums;
 using LinkDev.Ticketing.Infrastructure.Data;
 using LinkDev.UserManagent.Application.Interfaces;
 using LinkDev.UserManagent.Domain.Models;
@@ -14,9 +16,17 @@ namespace LinkDev.Ticketing.Infrastructure.Repositories
     public class TicketRepository : Repository<Ticket>, ITicketRepository
     {
         private readonly IUserManager _userManager;
-        public TicketRepository(TicketingContext dbContext, IUserManager userManager) : base(dbContext)
+        private readonly ILookupRepository _lookupRepository;
+        private readonly Logging.Application.Interfaces.ILogger _logger;
+
+        public TicketRepository(TicketingContext dbContext
+            , IUserManager userManager
+            , ILookupRepository lookupRepository
+            , Logging.Application.Interfaces.ILogger logger) : base(dbContext)
         {
             _userManager = userManager;
+            _lookupRepository = lookupRepository;
+            _logger = logger;
         }
 
         public IEnumerable<TicketView> GetTickets(TicketRequestDTO requestDTO, string userId, Guid correlationId, out int totalCount)
@@ -131,6 +141,60 @@ namespace LinkDev.Ticketing.Infrastructure.Repositories
             List<TicketView> tickets = _dBContext.Database.SqlQueryRaw<TicketView>(query.ToString(),sqlParameters.ToArray()).ToList();
 
             return tickets;
+        }
+
+        public List<TicketStatisticsDTO>? GetTicketStatistics(string culture, string userId, Guid correlationId)
+        {
+            try
+            {
+                var lookupStatus = _lookupRepository.GetLookup<BaseLookup>(LookupType.TicketStatus, culture);
+                var lookupPriority = _lookupRepository.GetLookup<BaseLookup>(LookupType.TicketPriority, culture);
+
+                if(lookupStatus == null)
+                {
+                    _logger.LogInformation("lookupStatus is null", "TicketingRepository", "GetTicketStatistics", correlationId);
+                    return null;
+                }
+                if (lookupPriority == null) 
+                {
+                    _logger.LogInformation("lookupPriority is null", "TicketingRepository", "GetTicketStatistics", correlationId);
+                    return null;
+                }
+
+                List<TicketStatisticsDTO> statisticsDTOs = new List<TicketStatisticsDTO>();
+
+                var ticketStatusGroup = _dBContext.Tickets.GroupBy(x => x.Status).AsEnumerable();
+
+                var ticketByStatus = new TicketStatisticsDTO();
+                ticketByStatus.KeyIndicators = ticketStatusGroup.Select(x => new KeyIndicator()
+                {
+                    Key = x.Key.ToString(),
+                    Value = x.Count().ToString(),
+                    Name = lookupStatus.FirstOrDefault(i => i.Id == x.Key)?.Name
+                }).ToList();
+
+
+                var ticketPriorityGroup = _dBContext.Tickets.GroupBy(x => x.Priority).AsEnumerable();
+
+                var ticketByPriority = new TicketStatisticsDTO();
+                ticketByPriority.KeyIndicators = ticketPriorityGroup.Select(x => new KeyIndicator()
+                {
+                    Key = x.Key.ToString(),
+                    Value = x.Count().ToString(),
+                    Name = lookupPriority.FirstOrDefault(i => i.Id == x.Key)?.Name
+                }).ToList();
+
+                statisticsDTOs.Add(ticketByStatus);
+                statisticsDTOs.Add(ticketByPriority);
+
+                return statisticsDTOs;
+            }
+            catch (Exception exp)
+            {
+                _logger.LogError(exp, "Exception in GetTicketStatistics", "TicketingRepository", "GetTicketStatistics", correlationId);
+
+                return null;
+            }
         }
     }
 }
