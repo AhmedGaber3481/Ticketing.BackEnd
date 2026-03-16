@@ -1,13 +1,11 @@
 ﻿using LinkDev.UserManagent.Infrastructure.Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace LinkDev.UserManagent.Infrastructure.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
+    public class UsersDBContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> contextOptions) : base(contextOptions)
+        public UsersDBContext(DbContextOptions<UsersDBContext> contextOptions) : base(contextOptions)
         {
 
         }

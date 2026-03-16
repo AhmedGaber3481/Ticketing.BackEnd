@@ -4,7 +4,6 @@ using LinkDev.UserManagent.Domain.DTOs;
 using LinkDev.UserManagent.Infrastructure.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace LinkDev.UserManagent.Infrastructure.Repositories
 {
@@ -106,7 +105,7 @@ namespace LinkDev.UserManagent.Infrastructure.Repositories
         {
             try
             {
-                var user = _applicationDbContext.Users.Include(e=> e.UserDetails).FirstOrDefault(x => x.Id == userId);
+                var user = _applicationDbContext.Users.FirstOrDefault(x => x.Id == userId);
 
                 if (user == null)
                 {
@@ -124,7 +123,7 @@ namespace LinkDev.UserManagent.Infrastructure.Repositories
                 userDTO.Email = user.Email;
                 userDTO.PhoneNumber = user.PhoneNumber;
                 userDTO.UserName = user.UserName;
-                userDTO.UserFullName = user.UserDetails?.FullName;
+                userDTO.UserFullName = _applicationDbContext.UserDetails.FirstOrDefault(x => x.UserId == userId)?.FullName;
                 if (_role != null) 
                 {
                    userDTO.RoleId = _role.Id;

@@ -1,6 +1,7 @@
 using LinkDev.Ticketing.Logging.Infra;
 using LinkDev.UserManagent.Application.Interfaces;
 using LinkDev.UserManagent.Infrastructure.Data;
+using LinkDev.UserManagent.Infrastructure.Entities;
 using LinkDev.UserManagent.Infrastructure.Repositories;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;

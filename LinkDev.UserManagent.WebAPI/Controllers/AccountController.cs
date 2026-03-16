@@ -4,7 +4,6 @@ using LinkDev.UserManagent.Domain.Models;
 using LinkDev.UserManagent.WebAPI.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 namespace Identity.Controllers
 {

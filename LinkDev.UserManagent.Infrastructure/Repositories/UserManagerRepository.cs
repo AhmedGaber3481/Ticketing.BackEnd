@@ -1,14 +1,10 @@
-﻿using Azure;
-using LinkDev.UserManagent.Application.Interfaces;
+﻿using LinkDev.UserManagent.Application.Interfaces;
 using LinkDev.UserManagent.Domain.DTOs;
 using LinkDev.UserManagent.Domain.Models;
 using LinkDev.UserManagent.Infrastructure.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Text;
 
 namespace LinkDev.UserManagent.Infrastructure.Repositories
 {
